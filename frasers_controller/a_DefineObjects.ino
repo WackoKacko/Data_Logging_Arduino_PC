@@ -72,4 +72,4 @@ unsigned long rh_start, rh_duration;
 
 const unsigned int WINDOW_SIZE = 5000;
 
-PID* system_plotted = &bh_PID; //edit this to plot other systems
+PID* system_plotted = &ih_PID; //edit this to plot other systems

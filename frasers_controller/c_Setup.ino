@@ -31,6 +31,8 @@ void setup() {
   pinMode(BOX_HEATER_RELAY_PIN, OUTPUT);
   pinMode(IMMERSION_HEATER_RELAY_PIN, OUTPUT);
   pinMode(THERMISTOR_PIN, INPUT);
+  pinMode(WATER_LEVEL_PIN, INPUT);
+  pinMode(LED_BUILTIN, OUTPUT);
 
 
   //Task scheduler

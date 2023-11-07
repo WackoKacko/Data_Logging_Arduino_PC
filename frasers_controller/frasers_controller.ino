@@ -35,6 +35,7 @@
 #define BOX_HEATER_RELAY_PIN 5
 #define IMMERSION_HEATER_RELAY_PIN 6
 #define THERMISTOR_PIN 14 //(A0)
+#define WATER_LEVEL_PIN 21 //(A7)
 
 
 // // The following pins are used... (for the ESP32)

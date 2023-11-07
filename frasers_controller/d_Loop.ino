@@ -11,12 +11,17 @@ void loop() {
   if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window on time
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW); //window off time
 
-
-  ih_PID.Compute();
-  if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
-  if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time
-  else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time
-
+  if(digitalRead(WATER_LEVEL_PIN)) { //if no water in the cup, turn off immersion heater and flash LED as an alert
+    flashLED();
+    digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); 
+  }
+  else {
+    digitalWrite(LED_BUILTIN, LOW);
+    ih_PID.Compute();
+    if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
+    if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time
+    else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time
+  }
 
   bh_PID.Compute();
   // Serial.print("bh output: "); Serial.println(bh_output);

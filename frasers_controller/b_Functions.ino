@@ -50,6 +50,15 @@ void readThermistor() {
 }
 
 
+void flashLED() {
+  static unsigned long flash_time;
+  if (millis()-flash_time > 50) {
+    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+    flash_time = millis();
+  }
+}
+
+
 void plotSystem() {
   Serial.print("Input:"); Serial.print(*(system_plotted->myInput)); Serial.print(",");
   Serial.print("Setpoint:"); Serial.print(*(system_plotted->mySetpoint)); Serial.print(",");
