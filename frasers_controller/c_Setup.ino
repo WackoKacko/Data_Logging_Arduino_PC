@@ -43,12 +43,14 @@ void setup() {
   Runner.addTask(CheckBoxTemp);
   Runner.addTask(SendJson);
   Runner.addTask(PlotSystem);
+  Runner.addTask(PlotSystems);
   CheckCO2.enable();
   CheckRH.enable();
   CheckWaterTemp.enable();
   CheckBoxTemp.enable();
   // SendJson.enable();
-  PlotSystem.enable();
+  // PlotSystem.enable();
+  PlotSystems.enable();
   Serial.println("Initialized scheduler");
 
 

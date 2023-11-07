@@ -21,6 +21,7 @@ void readTemperature();
 void readThermistor();
 void handleUserInput();
 void plotSystem();
+void plotSystems();
 
 //Tasks
 Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
@@ -29,6 +30,8 @@ Task CheckWaterTemp(2*1000, TASK_FOREVER, &readTemperature); //check water tempe
 Task CheckBoxTemp(2*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task PlotSystem(100, TASK_FOREVER, &plotSystem);
+Task PlotSystems(100, TASK_FOREVER, &plotSystems);
+
 
 //PID
 typedef struct { // Define PID parameters to store in memory
