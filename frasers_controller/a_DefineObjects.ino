@@ -29,8 +29,8 @@ Task CheckRH(2*1000, TASK_FOREVER, &readHumidity); //check relative humidity eve
 Task CheckWaterTemp(2*1000, TASK_FOREVER, &readTemperature); //check water temperature every 2 seconds
 Task CheckBoxTemp(2*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
-Task PlotSystem(100, TASK_FOREVER, &plotSystem);
-Task PlotSystems(100, TASK_FOREVER, &plotSystems);
+Task PlotSystem(200, TASK_FOREVER, &plotSystem);
+Task PlotSystems(200, TASK_FOREVER, &plotSystems);
 
 
 //PID

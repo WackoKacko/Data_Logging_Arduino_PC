@@ -5,7 +5,7 @@ void loop() {
 
   if (Serial.available() > 0) handleUserInput();
 
-
+ //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
   rh_PID.Compute();
   if (millis() - rh_start > WINDOW_SIZE) rh_start += WINDOW_SIZE; //time to shift the Relay Window
   if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window on time
@@ -19,15 +19,19 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
     ih_PID.Compute();
     if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
-    if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time
-    else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time
+    if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window on time
+    else digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window off time
   }
+  // ih_PID.Compute();
+  // if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
+  // if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time
+  // else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time
 
   bh_PID.Compute();
   // Serial.print("bh output: "); Serial.println(bh_output);
   if (millis() - bh_start > WINDOW_SIZE) bh_start += WINDOW_SIZE; //time to shift the Relay Window
-  if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window on time
-  else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time
+  if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window on time
+  else digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window off time
 
 }
 

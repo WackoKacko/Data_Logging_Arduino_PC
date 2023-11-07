@@ -9,7 +9,7 @@ void sendJson() {
 
 void readCO2() {
   co2 = scd41.getCO2();
-  printf("CO2: %i\n", co2);
+  // printf("CO2: %i\n", co2);
   // return co2;
 }
 
@@ -67,15 +67,15 @@ void plotSystem() {
 }
 
 void plotSystems() {
-  Serial.print("BoxInput:"); Serial.print(*bh_PID.myInput); Serial.print(",");
-  Serial.print("BoxSetpoint:"); Serial.print(*bh_PID.mySetpoint); Serial.print(",");
-  Serial.print("BoxOutput:"); Serial.print(*bh_PID.myOutput/1000); Serial.print(",");
-  Serial.print("ImmersionInput:"); Serial.print(*ih_PID.myInput); Serial.print(",");
-  Serial.print("ImmersionSetpoint:"); Serial.print(*ih_PID.mySetpoint); Serial.print(",");
-  Serial.print("ImmersionOutput:"); Serial.print(*ih_PID.myOutput/1000); Serial.print(",");
-  Serial.print("RHInput:"); Serial.print(*rh_PID.myInput); Serial.print(",");
-  Serial.print("RHSetpoint:"); Serial.print(*rh_PID.mySetpoint); Serial.print(",");
-  Serial.print("RHOutput:"); Serial.print(*rh_PID.myOutput/1000); //Serial.print(",");
+  Serial.print("BoxIn:"); Serial.print(*bh_PID.myInput); Serial.print(",");
+  Serial.print("BoxSetP:"); Serial.print(saved_parameters.bh.Setpoint); Serial.print(",");
+  Serial.print("BoxOut:"); Serial.print(*bh_PID.myOutput/1000); Serial.print(",");
+  Serial.print("ImmIn:"); Serial.print(*ih_PID.myInput); Serial.print(",");
+  Serial.print("ImmSetP:"); Serial.print(saved_parameters.ih.Setpoint); Serial.print(",");
+  Serial.print("ImmOut:"); Serial.print(*ih_PID.myOutput/1000); Serial.print(",");
+  Serial.print("RHIn:"); Serial.print(*rh_PID.myInput); Serial.print(",");
+  Serial.print("RHSetP:"); Serial.print(saved_parameters.rh.Setpoint); //Serial.print(",");
+  // Serial.print("RHOut:"); Serial.print(*rh_PID.myOutput/1000); //Serial.print(",");
   Serial.println();
 }
 
