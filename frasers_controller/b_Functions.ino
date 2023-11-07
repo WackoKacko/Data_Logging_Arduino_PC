@@ -57,6 +57,19 @@ void plotSystem() {
   Serial.println();
 }
 
+void plotSystems() {
+  Serial.print("BoxInput:"); Serial.print(*bh_PID.myInput); Serial.print(",");
+  Serial.print("BoxSetpoint:"); Serial.print(*bh_PID.mySetpoint); Serial.print(",");
+  Serial.print("BoxOutput:"); Serial.print(*bh_PID.myOutput/1000); Serial.print(",");
+  Serial.print("ImmersionInput:"); Serial.print(*ih_PID.myInput); Serial.print(",");
+  Serial.print("ImmersionSetpoint:"); Serial.print(*ih_PID.mySetpoint); Serial.print(",");
+  Serial.print("ImmersionOutput:"); Serial.print(*ih_PID.myOutput/1000); Serial.print(",");
+  Serial.print("RHInput:"); Serial.print(*rh_PID.myInput); Serial.print(",");
+  Serial.print("RHSetpoint:"); Serial.print(*rh_PID.mySetpoint); Serial.print(",");
+  Serial.print("RHOutput:"); Serial.print(*rh_PID.myOutput/1000); //Serial.print(",");
+  Serial.println();
+}
+
 
 void handleUserInput() { //more neat but I can't get printf() to work for %s type.
   String user_input = Serial.readString(); //Read user input string
