@@ -20,6 +20,7 @@ void readHumidity();
 void readTemperature();
 void readThermistor();
 void handleUserInput();
+void plotSystem();
 
 //Tasks
 Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
@@ -27,6 +28,7 @@ Task CheckRH(2*1000, TASK_FOREVER, &readHumidity); //check relative humidity eve
 Task CheckWaterTemp(2*1000, TASK_FOREVER, &readTemperature); //check water temperature every 2 seconds
 Task CheckBoxTemp(2*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
+Task PlotSystem(100, TASK_FOREVER, &plotSystem);
 
 //PID
 typedef struct { // Define PID parameters to store in memory
@@ -69,3 +71,5 @@ PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), default_syste
 unsigned long rh_start, rh_duration;
 
 const unsigned int WINDOW_SIZE = 5000;
+
+PID* system_plotted = &bh_PID; //edit this to plot other systems

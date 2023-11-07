@@ -23,7 +23,11 @@ void loop() {
   if (millis() - bh_start > WINDOW_SIZE) bh_start += WINDOW_SIZE; //time to shift the Relay Window
   if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window on time
   else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time
+
+  // plotSystem();
 }
+
+
 
 
 /*

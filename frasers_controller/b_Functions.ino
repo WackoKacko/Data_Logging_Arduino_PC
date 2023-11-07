@@ -17,7 +17,7 @@ void readCO2() {
 void readHumidity() {
   humidity = aht10.readHumidity();
   rh_input = humidity;
-  printf("Humidity: %0.1f\n", humidity);
+  // printf("Humidity: %0.1f\n", humidity);
   // return humidity;
 }
 
@@ -25,8 +25,8 @@ void readHumidity() {
 void readTemperature() {
   box_temperature = aht10.readTemperature();
   bh_input = box_temperature;
-  printf("Box temperature: %0.1f\n", bh_input);
-  printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
+  // printf("Box temperature: %0.1f\n", bh_input);
+  // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
   return box_temperature;
 }
 
@@ -45,8 +45,16 @@ void readThermistor() {
   float T_kelvin = 1.0 / (A + B * log(R_now) + C * pow(log(R_now), 2) + D * pow(log(R_now), 3));  // 1/T = A+B*ln(R)+C*(ln(R))^2+D*(ln(r))^3
   static const float KELVIN_CONSTANT = 273.15;
   water_temperature = T_kelvin - KELVIN_CONSTANT; //return temperature in Celsius
-  printf("Water temperature: %0.1f\n", water_temperature);
+  // printf("Water temperature: %0.1f\n", water_temperature);
   ih_input = water_temperature;
+}
+
+
+void plotSystem() {
+  Serial.print("Input:"); Serial.print(*(system_plotted->myInput)); Serial.print(",");
+  Serial.print("Setpoint:"); Serial.print(*(system_plotted->mySetpoint)); Serial.print(",");
+  Serial.print("Output:"); Serial.print(*(system_plotted->myOutput)/1000); //Serial.print(",");
+  Serial.println();
 }
 
 
