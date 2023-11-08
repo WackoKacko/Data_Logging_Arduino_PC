@@ -87,7 +87,7 @@ const float IH_MAX = 25, IH_MIN = 25; //max and min water temperature
 const float BH_MAX = 25, BH_MIN = 25; //max and min box temperature
 const float RH_MAX = 80, RH_MIN = 50; //max and min relative humidity
 // const unsigned long T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
-const unsigned long T = 1000*60*30; //period is ten minutes (milliseconds in 10 minutes)
+const unsigned long T = 1000*60*1; //period is ten minutes (milliseconds in 10 minutes)
 
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
