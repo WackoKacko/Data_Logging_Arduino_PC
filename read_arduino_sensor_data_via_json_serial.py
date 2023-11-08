@@ -31,7 +31,7 @@ except Exception as e:
 
 # Select the default sheet (you can change the sheet name as needed)
 sheet = workbook.active
-sheet.append(["Time", "CO2 (ppm)", "%RH", "Celsius"]) # Add labels to the first row
+sheet.append(["Time", "CO2 (ppm)", "%RH", "Celsius", "Relative Humidity Setpoint (%RH)", "Box Temp. Setpoint (°C)", "Water Temp. Setpoint (°C)"]) # Add labels to the first row
 
 while True:
     # Read a line from the Arduino
@@ -44,17 +44,20 @@ while True:
         co2 = sensor_data["co2"]
         humidity = sensor_data["%RH"]
         temperature = sensor_data["tempC"]
+        rhsp = sensor_data["RHSP"]
+        bhsp = sensor_data["BHSP"]
+        ihsp = sensor_data["IHSP"]
 
         # Get the current date and time
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         # Append data to the Excel sheet
-        sheet.append([current_time, co2, humidity, temperature])
+        sheet.append([current_time, co2, humidity, temperature, rhsp, bhsp, ihsp])
 
         # Save the Excel file
         workbook.save(excel_file_path)
 
-        print(f"Data recorded: {current_time}, CO2: {co2}, RH: {humidity}, Temperature: {temperature}")
+        print(f"Data recorded: {current_time}, CO2: {co2}, RH: {humidity}, Temperature: {temperature}, RHSP: {rhsp}, BHSP: {bhsp}, IHSP: {ihsp}")
     except json.JSONDecodeError:
         print(f"Invalid JSON data: {line}")
     except KeyError as e:
