@@ -1,7 +1,8 @@
 
 //Sensors
 SCD4x scd41;
-AHTxx aht10(AHTXX_ADDRESS_X38, AHT1x_SENSOR); //sensor address, sensor type
+// AHTxx aht(AHTXX_ADDRESS_X38, AHT1x_SENSOR); //sensor address, sensor type (aht10)
+AHTxx aht(AHTXX_ADDRESS_X38, AHT2x_SENSOR); //(aht21)
 
 //Global variables
 float box_temperature, humidity, water_temperature;
