@@ -11,12 +11,12 @@ void setup() {
 
 
   //AHT10 sensor start
-  while (aht10.begin() != true) { //begin AHT10 sensor
+  while (aht.begin() != true) { //begin AHT10 sensor
     Serial.println("AHT1x not connected or fail to load calibration coefficient");
     delay(5000);
   }
-  Serial.println("AHT10 OK");
-  aht10.softReset();
+  Serial.println("AHT OK");
+  aht.softReset();
   delay(200);
 
 
