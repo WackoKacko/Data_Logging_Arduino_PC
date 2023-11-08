@@ -23,6 +23,9 @@ void readThermistor();
 void handleUserInput();
 void plotSystem();
 void plotSystems();
+void ihSinusoidSetpoint();
+void bhSinusoidSetpoint();
+void rhSinusoidSetpoint();
 
 //Tasks
 Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
@@ -32,6 +35,9 @@ Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperatur
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task PlotSystem(200, TASK_FOREVER, &plotSystem);
 Task PlotSystems(200, TASK_FOREVER, &plotSystems);
+Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);
+Task BhSinusoidSetpoint(1*1000, TASK_FOREVER, &bhSinusoidSetpoint);
+Task RhSinusoidSetpoint(1*1000, TASK_FOREVER, &rhSinusoidSetpoint);
 
 
 //PID
@@ -75,6 +81,37 @@ PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), default_syste
 unsigned long rh_start, rh_duration;
 
 // const unsigned int MIN_WINDOW = 500;
-const unsigned int WINDOW_SIZE = 3000;
+const unsigned int WINDOW_SIZE = 3000; //for PID
+
+const float IH_MAX = 60, IH_MIN = 20; //max and min water temperature
+const float BH_MAX = 50, BH_MIN = 20; //max and min box temperature
+const float RH_MAX = 90, RH_MIN = 40; //max and min relative humidity
+// const unsigned int T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
+const unsigned int T = 1000*60*10; //period is ten minutes (milliseconds in 10 minutes)
+
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
+
+//NOTE: ALL OF THE BELOW FUNCTIONS START AT MIDPOINT
+void ihSinusoidSetpoint() {
+  unsigned long x=millis();
+  float a = (IH_MAX-IH_MIN)/2; //wave amplitude
+  float b = (IH_MAX+IH_MIN)/2; //wave vertical offset
+  saved_parameters.ih.Setpoint = a*sin(2*3.1416/T*x)+b;
+}
+
+void bhSinusoidSetpoint() {
+  unsigned long x=millis();
+  float a = (BH_MAX-BH_MIN)/2; //wave amplitude
+  float b = (BH_MAX+BH_MIN)/2; //wave vertical offset
+  unsigned int T = 1000*60*60*24; //milliseconds in a day (=8.64e7)
+  saved_parameters.bh.Setpoint = a*sin(2*3.1416/T*x)+b;
+}
+
+void rhSinusoidSetpoint() {
+    unsigned long x=millis();
+  float a = (RH_MAX-RH_MIN)/2; //wave amplitude
+  float b = (RH_MAX+RH_MIN)/2; //wave vertical offset
+  unsigned int T = 1000*60*60*24; //milliseconds in a day (=8.64e7)
+  saved_parameters.rh.Setpoint = a*sin(2*3.1416/T*x)+b;
+}

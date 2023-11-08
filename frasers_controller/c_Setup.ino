@@ -44,6 +44,9 @@ void setup() {
   Runner.addTask(SendJson);
   Runner.addTask(PlotSystem);
   Runner.addTask(PlotSystems);
+  Runner.addTask(IhSinusoidSetpoint);
+  Runner.addTask(BhSinusoidSetpoint);
+  Runner.addTask(RhSinusoidSetpoint);
   CheckCO2.enable();
   CheckRH.enable();
   CheckWaterTemp.enable();
@@ -51,6 +54,9 @@ void setup() {
   // SendJson.enable();
   // PlotSystem.enable();
   PlotSystems.enable();
+  IhSinusoidSetpoint.disable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
+  BhSinusoidSetpoint.disable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
+  RhSinusoidSetpoint.disable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   Serial.println("Initialized scheduler");
 
 
