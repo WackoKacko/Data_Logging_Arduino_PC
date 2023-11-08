@@ -15,7 +15,7 @@ void readCO2() {
 
 
 void readHumidity() {
-  humidity = aht10.readHumidity();
+  humidity = aht.readHumidity();
   rh_input = humidity;
   // printf("Humidity: %0.1f\n", humidity);
   // return humidity;
@@ -23,7 +23,7 @@ void readHumidity() {
 
 
 void readTemperature() {
-  box_temperature = aht10.readTemperature();
+  box_temperature = aht.readTemperature();
   bh_input = box_temperature;
   // printf("Box temperature: %0.1f\n", bh_input);
   // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
