@@ -86,8 +86,8 @@ const unsigned int WINDOW_SIZE = 3000; //for PID
 const float IH_MAX = 25, IH_MIN = 25; //max and min water temperature
 const float BH_MAX = 25, BH_MIN = 25; //max and min box temperature
 const float RH_MAX = 80, RH_MIN = 50; //max and min relative humidity
-// const unsigned int T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
-const unsigned int T = 1000*60*3000; //period is ten minutes (milliseconds in 10 minutes)
+// const unsigned long T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
+const unsigned long T = 1000*60*3000; //period is ten minutes (milliseconds in 10 minutes)
 
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
@@ -95,6 +95,7 @@ PID* system_plotted = &ih_PID; //edit this to plot other systems
 //NOTE: ALL OF THE BELOW FUNCTIONS START AT MIDPOINT
 void ihSinusoidSetpoint() {
   unsigned long x=millis();
+  Serial.print("ih_time in seconds = "); Serial.println(x/1000);
   float a = (IH_MAX-IH_MIN)/2; //wave amplitude
   float b = (IH_MAX+IH_MIN)/2; //wave vertical offset
   saved_parameters.ih.Setpoint = a*sin(2*3.1416/T*x)+b;
@@ -102,13 +103,15 @@ void ihSinusoidSetpoint() {
 
 void bhSinusoidSetpoint() {
   unsigned long x=millis();
+  Serial.print("bh_time in seconds = "); Serial.println(x/1000);
   float a = (BH_MAX-BH_MIN)/2; //wave amplitude
   float b = (BH_MAX+BH_MIN)/2; //wave vertical offset
   saved_parameters.bh.Setpoint = a*sin(2*3.1416/T*x)+b;
 }
 
 void rhSinusoidSetpoint() {
-    unsigned long x=millis();
+  unsigned long x=millis();
+  Serial.print("rh_time in seconds = "); Serial.println(x/1000);
   float a = (RH_MAX-RH_MIN)/2; //wave amplitude
   float b = (RH_MAX+RH_MIN)/2; //wave vertical offset
   saved_parameters.rh.Setpoint = a*sin(2*3.1416/T*x)+b;
