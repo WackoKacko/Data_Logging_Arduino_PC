@@ -67,7 +67,6 @@ PID_systems default_systems = {
 PID_systems saved_parameters; // Create global object to store PID settings in flash
 int flash_address = 0; // EEPROM address where PID parameters are stored
 
-//I might need to declare all the below as "global" and do it in setup() once flash has read the inputs. I hope I don't get error from setpoint.
 double ih_input, ih_output; // ("ih" stands for "immersion heater")
 PID ih_PID(&ih_input, &ih_output, &(saved_parameters.ih.Setpoint), default_systems.ih.Kp, default_systems.ih.Ki, default_systems.ih.Kd, DIRECT);
 unsigned long ih_start, ih_duration;
@@ -80,14 +79,14 @@ double rh_input, rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), default_systems.rh.Kp, default_systems.rh.Ki, default_systems.rh.Kd, DIRECT);
 unsigned long rh_start, rh_duration;
 
-// const unsigned int MIN_WINDOW = 500;
+const unsigned int MIN_WINDOW = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const float IH_MAX = 25, IH_MIN = 25; //max and min water temperature
 const float BH_MAX = 25, BH_MIN = 25; //max and min box temperature
 const float RH_MAX = 80, RH_MIN = 50; //max and min relative humidity
 // const unsigned long T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
-const unsigned long T = 1000*60*3000; //period is ten minutes (milliseconds in 10 minutes)
+unsigned long T = 1000*60*30; //period is 6 hours (milliseconds in 10 minutes)
 
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
@@ -95,7 +94,7 @@ PID* system_plotted = &ih_PID; //edit this to plot other systems
 //NOTE: ALL OF THE BELOW FUNCTIONS START AT MIDPOINT
 void ihSinusoidSetpoint() {
   unsigned long x=millis();
-  Serial.print("ih_time in seconds = "); Serial.println(x/1000);
+  // Serial.print("ih_time in seconds = "); Serial.println(x/1000);
   float a = (IH_MAX-IH_MIN)/2; //wave amplitude
   float b = (IH_MAX+IH_MIN)/2; //wave vertical offset
   saved_parameters.ih.Setpoint = a*sin(2*3.1416/T*x)+b;
@@ -103,7 +102,7 @@ void ihSinusoidSetpoint() {
 
 void bhSinusoidSetpoint() {
   unsigned long x=millis();
-  Serial.print("bh_time in seconds = "); Serial.println(x/1000);
+  // Serial.print("bh_time in seconds = "); Serial.println(x/1000);
   float a = (BH_MAX-BH_MIN)/2; //wave amplitude
   float b = (BH_MAX+BH_MIN)/2; //wave vertical offset
   saved_parameters.bh.Setpoint = a*sin(2*3.1416/T*x)+b;
@@ -111,7 +110,7 @@ void bhSinusoidSetpoint() {
 
 void rhSinusoidSetpoint() {
   unsigned long x=millis();
-  Serial.print("rh_time in seconds = "); Serial.println(x/1000);
+  // Serial.print("rh_time in seconds = "); Serial.println(x/1000);
   float a = (RH_MAX-RH_MIN)/2; //wave amplitude
   float b = (RH_MAX+RH_MIN)/2; //wave vertical offset
   saved_parameters.rh.Setpoint = a*sin(2*3.1416/T*x)+b;

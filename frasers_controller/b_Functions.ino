@@ -1,10 +1,31 @@
 
 void sendJson() {
   Json_Doc["co2"] = co2;
-  Json_Doc["%RH"] = humidity;
-  Json_Doc["tempC"] = box_temperature;
+
+  char humidityStr[10];  // Adjust the size based on your maximum expected value
+  dtostrf(humidity, 1, 1, humidityStr);
+  Json_Doc["%RH"] = humidityStr;
+
+  char tempCStr[10];  // Adjust the size based on your maximum expected value
+  dtostrf(box_temperature, 1, 1, tempCStr);
+  Json_Doc["tempC"] = tempCStr;
+
+  char rhspStr[10];  // Adjust the size based on your maximum expected value
+  dtostrf(saved_parameters.rh.Setpoint, 1, 1, rhspStr);
+  Json_Doc["RHSP"] = rhspStr; //only going to one decimal place
+
+  char bhspStr[10];  // Adjust the size based on your maximum expected value
+  dtostrf(saved_parameters.bh.Setpoint, 1, 1, bhspStr); //only going to one decimal place
+  Json_Doc["BHSP"] = bhspStr; //only going to one decimal place
+
+  char ihspStr[10];
+  dtostrf(saved_parameters.ih.Setpoint, 1, 1, ihspStr);
+  Json_Doc["IHSP"] = ihspStr;
+
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
+  Serial.println();
 }
+
 
 
 void readCO2() {
@@ -27,7 +48,7 @@ void readTemperature() {
   bh_input = box_temperature;
   // printf("Box temperature: %0.1f\n", bh_input);
   // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
-  return box_temperature;
+  // return box_temperature;
 }
 
 
@@ -80,7 +101,7 @@ void plotSystems() {
 }
 
 
-void handleUserInput() { //more neat but I can't get printf() to work for %s type.
+void handleUserInput() {
   String user_input = Serial.readString(); //Read user input string
   user_input.trim(); //Remove trailing whitespace characters
   Serial.print("Received: "); Serial.println(user_input);
@@ -89,7 +110,6 @@ void handleUserInput() { //more neat but I can't get printf() to work for %s typ
   PID* process;
   char first_char = user_input.charAt(0); // Get the first character
   char actuator_name[20];
-  // Serial.print("First char: "); Serial.println(first_char);
   if (first_char == 'i') {
     actuator = &(saved_parameters.ih);
     strcpy(actuator_name, "Immersion Heater");

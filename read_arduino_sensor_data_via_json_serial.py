@@ -5,10 +5,10 @@ from openpyxl import load_workbook
 from datetime import datetime
 
 # Define the COM port for Arduino (e.g., COM9)
-COM_PORT = 'COM5'
+COM_PORT = 'COM4'
 
 # Define the path to your Excel file
-excel_file_path = r'C:\Users\kbard\Documents\CO2-RH-TEMPC.xlsx'
+excel_file_path = r'C:\Users\bushb\Documents\CO2-RH-TEMPC.xlsx'
 
 # Initialize the serial connection
 try:
