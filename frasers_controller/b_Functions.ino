@@ -1,27 +1,11 @@
 
 void sendJson() {
   Json_Doc["co2"] = co2;
-
-  char humidityStr[10];  // Adjust the size based on your maximum expected value
-  dtostrf(humidity, 1, 1, humidityStr);
-  Json_Doc["%RH"] = humidityStr;
-
-  char tempCStr[10];  // Adjust the size based on your maximum expected value
-  dtostrf(box_temperature, 1, 1, tempCStr);
-  Json_Doc["tempC"] = tempCStr;
-
-  char rhspStr[10];  // Adjust the size based on your maximum expected value
-  dtostrf(saved_parameters.rh.Setpoint, 1, 1, rhspStr);
-  Json_Doc["RHSP"] = rhspStr; //only going to one decimal place
-
-  char bhspStr[10];  // Adjust the size based on your maximum expected value
-  dtostrf(saved_parameters.bh.Setpoint, 1, 1, bhspStr); //only going to one decimal place
-  Json_Doc["BHSP"] = bhspStr; //only going to one decimal place
-
-  char ihspStr[10];
-  dtostrf(saved_parameters.ih.Setpoint, 1, 1, ihspStr);
-  Json_Doc["IHSP"] = ihspStr;
-
+  Json_Doc["%RH"] = humidity;
+  Json_Doc["tempC"] = box_temperature;
+  Json_Doc["RHSP"] = saved_parameters.rh.Setpoint; //only going to one decimal place
+  Json_Doc["BHSP"] = saved_parameters.bh.Setpoint; //only going to one decimal place
+  Json_Doc["IHSP"] = saved_parameters.ih.Setpoint;
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
   Serial.println();
 }

@@ -69,49 +69,48 @@ int flash_address = 0; // EEPROM address where PID parameters are stored
 
 double ih_input, ih_output; // ("ih" stands for "immersion heater")
 PID ih_PID(&ih_input, &ih_output, &(saved_parameters.ih.Setpoint), default_systems.ih.Kp, default_systems.ih.Ki, default_systems.ih.Kd, DIRECT);
-unsigned long ih_start, ih_duration;
+unsigned long ih_start;
 
 double bh_input, bh_output; // ("bh" stands for "box heater")
 PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), default_systems.bh.Kp, default_systems.bh.Ki, default_systems.bh.Kd, DIRECT);
-unsigned long bh_start, bh_duration;
+unsigned long bh_start;
 
 double rh_input, rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), default_systems.rh.Kp, default_systems.rh.Ki, default_systems.rh.Kd, DIRECT);
-unsigned long rh_start, rh_duration;
+unsigned long rh_start;
 
 const unsigned int MIN_WINDOW = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
-const float IH_MAX = 25, IH_MIN = 25; //max and min water temperature
-const float BH_MAX = 25, BH_MIN = 25; //max and min box temperature
-const float RH_MAX = 80, RH_MIN = 50; //max and min relative humidity
-// const unsigned long T = 1000*60*60*24; // period is one day (milliseconds in a day, =8.64e7)
-unsigned long T = 1000*60*30; //period is 6 hours (milliseconds in 10 minutes)
-
+const int IH_MAX = 25, IH_MIN = 25; //max and min water temperature
+const int BH_MAX = 25, BH_MIN = 25; //max and min box temperature
+const int RH_MAX = 80, RH_MIN = 50; //max and min relative humidity
+const unsigned long T = 3600000; //Period in milliseconds. DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
 
 //NOTE: ALL OF THE BELOW FUNCTIONS START AT MIDPOINT
 void ihSinusoidSetpoint() {
-  unsigned long x=millis();
-  // Serial.print("ih_time in seconds = "); Serial.println(x/1000);
-  float a = (IH_MAX-IH_MIN)/2; //wave amplitude
-  float b = (IH_MAX+IH_MIN)/2; //wave vertical offset
-  saved_parameters.ih.Setpoint = a*sin(2*3.1416/T*x)+b;
+  static float a, b, angle;
+  a = (IH_MAX - IH_MIN) / 2;
+  b = (IH_MAX + IH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.ih.Setpoint = a * sin(angle) + b;
 }
 
 void bhSinusoidSetpoint() {
-  unsigned long x=millis();
-  // Serial.print("bh_time in seconds = "); Serial.println(x/1000);
-  float a = (BH_MAX-BH_MIN)/2; //wave amplitude
-  float b = (BH_MAX+BH_MIN)/2; //wave vertical offset
-  saved_parameters.bh.Setpoint = a*sin(2*3.1416/T*x)+b;
+  static float a, b, angle;
+  a = (BH_MAX - BH_MIN) / 2;
+  b = (BH_MAX + BH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.bh.Setpoint = a * sin(angle) + b;
 }
 
 void rhSinusoidSetpoint() {
-  unsigned long x=millis();
-  // Serial.print("rh_time in seconds = "); Serial.println(x/1000);
-  float a = (RH_MAX-RH_MIN)/2; //wave amplitude
-  float b = (RH_MAX+RH_MIN)/2; //wave vertical offset
-  saved_parameters.rh.Setpoint = a*sin(2*3.1416/T*x)+b;
+  static float a, b, angle;
+  a = (RH_MAX - RH_MIN) / 2;
+  b = (RH_MAX + RH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.rh.Setpoint = a * sin(angle) + b;
 }
+
