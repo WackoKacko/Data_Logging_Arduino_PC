@@ -2,7 +2,8 @@
 void sendJson() {
   Json_Doc["co2"] = co2;
   Json_Doc["%RH"] = humidity;
-  Json_Doc["tempC"] = box_temperature;
+  Json_Doc["boxTempC"] = box_temperature;
+  Json_Doc["waterTempC"] = ih_input;
   Json_Doc["RHSP"] = saved_parameters.rh.Setpoint; //only going to one decimal place
   Json_Doc["BHSP"] = saved_parameters.bh.Setpoint; //only going to one decimal place
   Json_Doc["IHSP"] = saved_parameters.ih.Setpoint;
