@@ -2,9 +2,15 @@
 void sendJson() {
   Json_Doc["co2"] = co2;
   Json_Doc["%RH"] = humidity;
-  Json_Doc["tempC"] = box_temperature;
+  Json_Doc["boxTempC"] = box_temperature;
+  Json_Doc["waterTempC"] = ih_input;
+  Json_Doc["RHSP"] = saved_parameters.rh.Setpoint; //only going to one decimal place
+  Json_Doc["BHSP"] = saved_parameters.bh.Setpoint; //only going to one decimal place
+  Json_Doc["IHSP"] = saved_parameters.ih.Setpoint;
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
+  Serial.println();
 }
+
 
 
 void readCO2() {
@@ -27,7 +33,7 @@ void readTemperature() {
   bh_input = box_temperature;
   // printf("Box temperature: %0.1f\n", bh_input);
   // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
-  return box_temperature;
+  // return box_temperature;
 }
 
 
@@ -80,7 +86,7 @@ void plotSystems() {
 }
 
 
-void handleUserInput() { //more neat but I can't get printf() to work for %s type.
+void handleUserInput() {
   String user_input = Serial.readString(); //Read user input string
   user_input.trim(); //Remove trailing whitespace characters
   Serial.print("Received: "); Serial.println(user_input);
@@ -89,7 +95,6 @@ void handleUserInput() { //more neat but I can't get printf() to work for %s typ
   PID* process;
   char first_char = user_input.charAt(0); // Get the first character
   char actuator_name[20];
-  // Serial.print("First char: "); Serial.println(first_char);
   if (first_char == 'i') {
     actuator = &(saved_parameters.ih);
     strcpy(actuator_name, "Immersion Heater");

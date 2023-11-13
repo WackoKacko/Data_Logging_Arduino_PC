@@ -51,9 +51,9 @@ void setup() {
   CheckRH.enable();
   CheckWaterTemp.enable();
   CheckBoxTemp.enable();
-  // SendJson.enable();
+  SendJson.enable();
   // PlotSystem.enable();
-  PlotSystems.enable();
+  // PlotSystems.enable();
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   RhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING

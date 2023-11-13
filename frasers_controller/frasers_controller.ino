@@ -19,6 +19,7 @@
 
 //The following libraries are used...
 #include <Wire.h>               //built-in
+#include <math.h>               //built-in
 #include <ArduinoJson.h>        //built-in (https://github.com/bblanchon/ArduinoJson) <- I think that's the correct repo
 #include "PID_v1.h"             //https://github.com/br3ttb/Arduino-PID-Library/tree/master
 #include "TaskScheduler.h"      //https://github.com/arkhipenko/TaskScheduler/tree/master
