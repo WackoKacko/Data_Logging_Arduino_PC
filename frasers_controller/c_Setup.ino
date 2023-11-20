@@ -65,15 +65,15 @@ void setup() {
   if (isnan(saved_parameters.ih.Kp)) saved_parameters.ih.Kp = 0;
   if (isnan(saved_parameters.ih.Ki)) saved_parameters.ih.Ki = 0;
   if (isnan(saved_parameters.ih.Kd)) saved_parameters.ih.Kd = 0;
-  if (isnan(saved_parameters.ih.Setpoint)) saved_parameters.ih.Setpoint = 0;
+  if (isnan(saved_parameters.ih.Setpoint)) saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
   if (isnan(saved_parameters.bh.Kp)) saved_parameters.bh.Kp = 0;
   if (isnan(saved_parameters.bh.Ki)) saved_parameters.bh.Ki = 0;
   if (isnan(saved_parameters.bh.Kd)) saved_parameters.bh.Kd = 0;
-  if (isnan(saved_parameters.bh.Setpoint)) saved_parameters.bh.Setpoint = 0;
+  if (isnan(saved_parameters.bh.Setpoint)) saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
   if (isnan(saved_parameters.rh.Kp)) saved_parameters.rh.Kp = 0;
   if (isnan(saved_parameters.rh.Ki)) saved_parameters.rh.Ki = 0;
   if (isnan(saved_parameters.rh.Kd)) saved_parameters.rh.Kd = 0;
-  if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = 0;
+  if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
   ih_PID.SetTunings(saved_parameters.ih.Kp, saved_parameters.ih.Ki, saved_parameters.ih.Kd); //update PID system with new settings
   bh_PID.SetTunings(saved_parameters.bh.Kp, saved_parameters.bh.Ki, saved_parameters.bh.Kd); //update PID system with new settings
@@ -88,6 +88,10 @@ void setup() {
   ih_input = 100; //higher than anything we'd expect so that nothing happens until first sensor readings
   bh_input = 100;
   rh_input = 100;
+
+  saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
+  saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
+  saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   
   ih_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   ih_PID.SetMode(AUTOMATIC); //turn the PID on
@@ -95,4 +99,7 @@ void setup() {
   bh_PID.SetMode(AUTOMATIC); //turn the PID on
   rh_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
+
+  // MCUSR = 0;
+  wdt_enable(WDTO_1S); //to do a software reset after 24 hours
 }

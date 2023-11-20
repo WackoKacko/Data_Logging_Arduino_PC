@@ -29,7 +29,7 @@
 // #include "Dimmer.h"             // https://github.com/circuitar/Dimmer  
 #include <LibPrintf.h>            // https://github.com/embeddedartistry/arduino-printf
 #include <EEPROM.h>               // built-in (https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM)
-
+#include <avr/wdt.h>
 
 // The following pins are used... (for the Arduino Nano Every)
 #define SOLENOID_VALVE_RELAY_PIN 3

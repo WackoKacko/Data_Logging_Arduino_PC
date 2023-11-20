@@ -12,7 +12,6 @@ void sendJson() {
 }
 
 
-
 void readCO2() {
   co2 = scd41.getCO2();
   // printf("CO2: %i\n", co2);
@@ -34,6 +33,32 @@ void readTemperature() {
   // printf("Box temperature: %0.1f\n", bh_input);
   // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
   // return box_temperature;
+}
+
+
+//NOTE: THE BELOW THREE SINUSOIDAL SETPOINT FUNCTIONS START AT MIDPOINT
+void ihSinusoidSetpoint() {
+  static float a, b, angle;
+  a = (IH_MAX - IH_MIN) / 2;
+  b = (IH_MAX + IH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.ih.Setpoint = a * sin(angle) + b;
+}
+
+void bhSinusoidSetpoint() {
+  static float a, b, angle;
+  a = (BH_MAX - BH_MIN) / 2;
+  b = (BH_MAX + BH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.bh.Setpoint = a * sin(angle) + b;
+}
+
+void rhSinusoidSetpoint() {
+  static float a, b, angle;
+  a = (RH_MAX - RH_MIN) / 2;
+  b = (RH_MAX + RH_MIN) / 2;
+  angle = fmod((float)millis(), T) * 2 * PI / T;
+  saved_parameters.rh.Setpoint = a * sin(angle) + b;
 }
 
 

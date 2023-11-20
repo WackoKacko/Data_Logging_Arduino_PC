@@ -4,6 +4,9 @@ void loop() {
 
   if (Serial.available() > 0) handleUserInput();
 
+  if ( millis() > T-2000 ) delay(2000); //software reset of Arduino using watchdog timer
+  else wdt_reset(); //avoid watchdog timer reset
+
  //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
   rh_PID.Compute();
   if (rh_output > WINDOW_SIZE-MIN_WINDOW) rh_output = WINDOW_SIZE; //quickest change 0.5s

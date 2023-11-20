@@ -88,29 +88,3 @@ const int RH_MAX = 90, RH_MIN = 50; //max and min relative humidity
 const unsigned long T = 86400000; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
-
-//NOTE: ALL OF THE BELOW FUNCTIONS START AT MIDPOINT
-void ihSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (IH_MAX - IH_MIN) / 2;
-  b = (IH_MAX + IH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.ih.Setpoint = a * sin(angle) + b;
-}
-
-void bhSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (BH_MAX - BH_MIN) / 2;
-  b = (BH_MAX + BH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.bh.Setpoint = a * sin(angle) + b;
-}
-
-void rhSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (RH_MAX - RH_MIN) / 2;
-  b = (RH_MAX + RH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.rh.Setpoint = a * sin(angle) + b;
-}
-
