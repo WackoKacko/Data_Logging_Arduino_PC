@@ -1,7 +1,6 @@
 import serial
 import json
-from openpyxl import Workbook
-from openpyxl import load_workbook
+from openpyxl import Workbook, load_workbook
 from datetime import datetime
 import time
 
@@ -24,14 +23,16 @@ except Exception as e:
 
 # Select the default sheet (you can change the sheet name as needed)
 sheet = workbook.active
-# sheet.append(["Time", "CO2 (ppm)", "%RH", "Humidity Setpoint", "Box Temp. (C)", "Box Temp. Setpoint", "Water Temp. (C)", "Water Temp. Setpoint"]) # Add labels to the first row
-# Add labels to the first row yourself
+
+# Initialize the serial connection
+ser = None
 
 while True:
     # Attempt to establish a serial connection
     try:
-        ser = serial.Serial(COM_PORT, 115200, timeout=1)
-        print(f"Connected to {COM_PORT}")
+        if ser is None or not ser.is_open:
+            ser = serial.Serial(COM_PORT, 115200, timeout=1)
+            print(f"Connected to {COM_PORT}")
     except Exception as e:
         print(f"Failed to connect to {COM_PORT}: {str(e)}")
         time.sleep(1)  # Wait for 1 second before retrying
@@ -39,10 +40,10 @@ while True:
 
     # Main loop for reading data from Arduino
     while True:
-        # Read a line from the Arduino
-        line = ser.readline().decode('utf-8').strip()
-
         try:
+            # Read a line from the Arduino
+            line = ser.readline().decode('utf-8').strip()
+
             sensor_data = json.loads(line)
 
             # Extract data from the JSON object
@@ -70,7 +71,8 @@ while True:
             print(f"Missing key in JSON data: {e}")
         except Exception as e:
             print(f"Error processing data: {str(e)}")
-            break  # Break out of the inner loop on error
+            # Continue to the next iteration of the loop on error
+            continue
 
     # Close the serial connection when the inner loop is exited
     ser.close()
