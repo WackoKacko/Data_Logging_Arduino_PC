@@ -88,3 +88,5 @@ const int RH_MAX = 90, RH_MIN = 50; //max and min relative humidity
 const unsigned long T = 86400000; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
+
+const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes

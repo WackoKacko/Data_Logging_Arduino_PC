@@ -101,5 +101,5 @@ void setup() {
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
 
   // MCUSR = 0;
-  wdt_enable(WDTO_1S); //to do a software reset after 24 hours
+  wdt_enable(WDTO_1S); //this is to enable watchdog so we can do a software reset every once in a while
 }

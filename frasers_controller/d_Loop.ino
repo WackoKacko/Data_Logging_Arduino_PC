@@ -4,7 +4,8 @@ void loop() {
 
   if (Serial.available() > 0) handleUserInput();
 
-  if ( millis() > T-2000 ) delay(2000); //software reset of Arduino using watchdog timer
+  // if ( millis() > T-2000 ) delay(2000); //software reset of Arduino using watchdog timer
+  if ( millis() > WATCHDOG_TIMEOUT_PERIOD ) delay(5000); //software reset of Arduino using watchdog timer
   else wdt_reset(); //avoid watchdog timer reset
 
  //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
