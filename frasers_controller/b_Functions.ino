@@ -1,6 +1,6 @@
 
 void sendJson() {
-  // Json_Doc["ID"] = DEVICE_ID;
+  Json_Doc["ID"] = DEVICE_ID;
   Json_Doc["co2"] = co2;
   Json_Doc["%RH"] = humidity;
   Json_Doc["RHSP"] = saved_parameters.rh.Setpoint; //only going to one decimal place
@@ -37,29 +37,22 @@ void readTemperature() {
 }
 
 
-//NOTE: THE BELOW THREE SINUSOIDAL SETPOINT FUNCTIONS START AT MIDPOINT
-void ihSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (IH_MAX - IH_MIN) / 2;
-  b = (IH_MAX + IH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.ih.Setpoint = a * sin(angle) + b;
+void angleCalc() {
+  angle = fmod((float)millis(), T) * 2 * PI / T + phase_shift;
+  saved_parameters.phase_shift = angle;
+}
+
+
+void ihSinusoidSetpoint() { 
+  saved_parameters.ih.Setpoint = ih_a * sin(angle) + ih_b;
 }
 
 void bhSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (BH_MAX - BH_MIN) / 2;
-  b = (BH_MAX + BH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.bh.Setpoint = a * sin(angle) + b;
+  saved_parameters.bh.Setpoint = bh_a * sin(angle) + bh_b;
 }
 
 void rhSinusoidSetpoint() {
-  static float a, b, angle;
-  a = (RH_MAX - RH_MIN) / 2;
-  b = (RH_MAX + RH_MIN) / 2;
-  angle = fmod((float)millis(), T) * 2 * PI / T;
-  saved_parameters.rh.Setpoint = a * sin(angle) + b;
+  saved_parameters.rh.Setpoint = rh_a * sin(angle) + rh_b;
 }
 
 
@@ -133,7 +126,10 @@ void handleUserInput() {
     actuator = &(saved_parameters.rh);
     strcpy(actuator_name, "Relative Humidity");
     process = &(rh_PID);
-  } else {
+  } else if (first_char == 'z') {
+    phase_shift = 0; //NOTE!!! THIS DOES NOT RESET SETPOINT TO ZERO, JUST GETS RID OF PHASE SHIFT. THIS IS BECAUSE SINUSOIDAL SETPOINT IS A FUNCTION OF millis()! NEED TO IMPLEMENT A BUFFER OR SOMETHING IN angleCalc() IF YOU WANT THAT FUNCTIONALITY!!
+    Serial.println("Phase Shift zeroed.");
+  }  else {
     Serial.println("Invalid input first char");
   }
 

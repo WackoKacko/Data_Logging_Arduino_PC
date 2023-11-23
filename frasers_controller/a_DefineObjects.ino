@@ -35,6 +35,7 @@ Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperatur
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task PlotSystem(200, TASK_FOREVER, &plotSystem);
 Task PlotSystems(200, TASK_FOREVER, &plotSystems);
+Task AngleCalc(1*1000, TASK_FOREVER, &angleCalc);
 Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);
 Task BhSinusoidSetpoint(1*1000, TASK_FOREVER, &bhSinusoidSetpoint);
 Task RhSinusoidSetpoint(1*1000, TASK_FOREVER, &rhSinusoidSetpoint);
@@ -52,6 +53,7 @@ typedef struct { // Group PID parameters by system
   PID_params ih;
   PID_params bh;
   PID_params rh;
+  double phase_shift;
 } PID_systems;
 
 PID_params default_params = { // Define default PID parameters (Kp, Ki, Kd, Setpoint)
@@ -86,6 +88,11 @@ const int IH_MAX = 25, IH_MIN = 25; //max and min water temperature
 const int BH_MAX = 25, BH_MIN = 25; //max and min box temperature
 const int RH_MAX = 90, RH_MIN = 50; //max and min relative humidity
 const unsigned long T = 86400000; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
+float angle, phase_shift;
+
+float ih_a = (IH_MAX - IH_MIN) / 2; float ih_b = (IH_MAX + IH_MIN) / 2;
+float bh_a = (BH_MAX - BH_MIN) / 2; float bh_b = (BH_MAX + BH_MIN) / 2;
+float rh_a = (RH_MAX - RH_MIN) / 2; float rh_b = (RH_MAX + RH_MIN) / 2;
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
 

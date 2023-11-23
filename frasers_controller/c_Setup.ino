@@ -44,6 +44,7 @@ void setup() {
   Runner.addTask(SendJson);
   Runner.addTask(PlotSystem);
   Runner.addTask(PlotSystems);
+  Runner.addTask(AngleCalc);
   Runner.addTask(IhSinusoidSetpoint);
   Runner.addTask(BhSinusoidSetpoint);
   Runner.addTask(RhSinusoidSetpoint);
@@ -54,6 +55,7 @@ void setup() {
   SendJson.enable();
   // PlotSystem.enable();
   // PlotSystems.enable();
+  AngleCalc.enable();
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   RhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
@@ -74,6 +76,8 @@ void setup() {
   if (isnan(saved_parameters.rh.Ki)) saved_parameters.rh.Ki = 0;
   if (isnan(saved_parameters.rh.Kd)) saved_parameters.rh.Kd = 0;
   if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
+  if (isnan(saved_parameters.phase_shift)) saved_parameters.phase_shift = 0;
+  else phase_shift = saved_parameters.phase_shift;
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
   ih_PID.SetTunings(saved_parameters.ih.Kp, saved_parameters.ih.Ki, saved_parameters.ih.Kd); //update PID system with new settings
   bh_PID.SetTunings(saved_parameters.bh.Kp, saved_parameters.bh.Ki, saved_parameters.bh.Kd); //update PID system with new settings
