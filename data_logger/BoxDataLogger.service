@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Environment="INFLUXDB_TOKEN="
-Environment="INFLUXDB_BUCKET=data-box"
+Environment="INFLUXDB_BUCKET=test"
 WorkingDirectory=/home/erik/heimdal-box/data_logger
 ExecStart=/home/erik/heimdal-env/bin/python /home/erik/heimdal-box/data_logger/app.py
 Type=notify
