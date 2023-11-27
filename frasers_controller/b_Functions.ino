@@ -128,6 +128,7 @@ void flashLED() {
     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     flash_time = millis();
   }
+  Serial.println(F("WATER TOO LOW."));
 }
 
 
