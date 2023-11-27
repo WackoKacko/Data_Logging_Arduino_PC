@@ -5,16 +5,19 @@ void setup() {
   Serial.begin(115200);
   while(!Serial) {}
 
+  Serial.println("Serial up. Initializing.");
+
 
   //I2C communication
   Wire.begin(); //begin I2C communication
-
+  Serial.println(F("I2C up."));
 
   //Little I2C Screen
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
     // for(;;);
   }
+  else Serial.println(F("Screen ok!"));
   // display.display(); // Display splash screen
   // delay(2000);
   // display.clearDisplay();
@@ -31,8 +34,8 @@ void setup() {
 
 
   // SHT30 sensor start
-  if (sht.init()) Serial.print("SHT30 OK\n");
-  else Serial.print("SHT30 FAILED\n");
+  if (sht.init()) Serial.println(F("SHT30 OK"));
+  else Serial.println(F("SHT30 FAILED"));
   sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM); // only supported by SHT3x
 
 

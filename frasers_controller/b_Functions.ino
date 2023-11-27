@@ -202,20 +202,20 @@ void handleUserInput() {
   String remaining_string = user_input.substring(2);  // Get the remaining part of the string
   if (remaining_string == "?") {
     printf("%s=%0.1f for %s\n", param_name, *parameter, actuator_name);
-  } else if (remaining_string == "+") {
-    *parameter += 0.1;
-    printf("%s+=0.1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
-  } else if (remaining_string == "++") {
-    *parameter += 1;
-    printf("%s+=1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
-  } else if (remaining_string == "-") {
-    if(*parameter>=0.1) *parameter -= 0.1;
-    else Serial.println("That would give a negative number, which isn't allowed.");
-    printf("%s-=0.1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
-  } else if (remaining_string == "--") {
-    if(*parameter>=1) *parameter -= 1;
-    else Serial.println("That would give a negative number, which isn't allowed.");
-    printf("%s-=1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
+  // } else if (remaining_string == "+") {
+  //   *parameter += 0.1;
+  //   printf("%s+=0.1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
+  // } else if (remaining_string == "++") {
+  //   *parameter += 1;
+  //   printf("%s+=1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
+  // } else if (remaining_string == "-") {
+  //   if(*parameter>=0.1) *parameter -= 0.1;
+  //   else Serial.println("That would give a negative number, which isn't allowed.");
+  //   printf("%s-=0.1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
+  // } else if (remaining_string == "--") {
+  //   if(*parameter>=1) *parameter -= 1;
+  //   else Serial.println("That would give a negative number, which isn't allowed.");
+  //   printf("%s-=1, %s=%0.1f for %s\n", param_name, param_name, *parameter, actuator_name);
   } else if (remaining_string.charAt(0) == '=') {
     double number = remaining_string.substring(1).toDouble();
     if (number != 0.0) { // Conversion successfu.
