@@ -18,9 +18,9 @@ void setup() {
     // for(;;);
   }
   else Serial.println(F("Screen ok!"));
-  // display.display(); // Display splash screen
-  // delay(2000);
-  // display.clearDisplay();
+  display.display(); // Display splash screen
+  delay(500);
+  display.clearDisplay();
 
 
   // //AHT10 sensor start
