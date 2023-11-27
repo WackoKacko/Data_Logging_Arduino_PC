@@ -5,10 +5,10 @@ from datetime import datetime
 import time
 
 # Define the COM port for Arduino (e.g., COM9)
-COM_PORT = 'COM4'
+COM_PORT = 'COM15'
 
 # Define the path to your Excel file
-excel_file_path = r'C:\Users\bushb\Documents\CO2-RH-TEMPC.xlsx'
+excel_file_path = r'C:\Users\kbard\Documents\CO2-RH-TEMPC.xlsx'
 
 # Create or load the Excel workbook
 try:
@@ -47,6 +47,7 @@ while True:
             sensor_data = json.loads(line)
 
             # Extract data from the JSON object
+            id = sensor_data["ID"]
             co2 = sensor_data["co2"]
             humidity = sensor_data["%RH"]
             rhsp = sensor_data["RHSP"]
