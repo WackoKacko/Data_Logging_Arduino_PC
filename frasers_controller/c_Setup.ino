@@ -10,14 +10,30 @@ void setup() {
   Wire.begin(); //begin I2C communication
 
 
-  //AHT10 sensor start
-  while (aht.begin() != true) { //begin AHT10 sensor
-    Serial.println("AHT1x not connected or fail to load calibration coefficient");
-    delay(5000);
+  //Little I2C Screen
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+    // for(;;);
   }
-  Serial.println("AHT OK");
-  aht.softReset();
-  delay(200);
+  // display.display(); // Display splash screen
+  // delay(2000);
+  // display.clearDisplay();
+
+
+  // //AHT10 sensor start
+  // while (aht.begin() != true) { //begin AHT10 sensor
+  //   Serial.println("AHT1x not connected or fail to load calibration coefficient");
+  //   delay(5000);
+  // }
+  // Serial.println("AHT OK");
+  // aht.softReset();
+  // delay(200);
+
+
+  // SHT30 sensor start
+  if (sht.init()) Serial.print("SHT30 OK\n");
+  else Serial.print("SHT30 FAILED\n");
+  sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM); // only supported by SHT3x
 
 
   //SCD41 sensor start
@@ -42,12 +58,13 @@ void setup() {
   Runner.addTask(CheckWaterTemp);
   Runner.addTask(CheckBoxTemp);
   Runner.addTask(SendJson);
-  Runner.addTask(PlotSystem);
-  Runner.addTask(PlotSystems);
+  // Runner.addTask(PlotSystem);
+  // Runner.addTask(PlotSystems);
   Runner.addTask(AngleCalc);
   Runner.addTask(IhSinusoidSetpoint);
   Runner.addTask(BhSinusoidSetpoint);
   Runner.addTask(RhSinusoidSetpoint);
+  Runner.addTask(DisplayValues);
   CheckCO2.enable();
   CheckRH.enable();
   CheckWaterTemp.enable();
@@ -59,6 +76,7 @@ void setup() {
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   RhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
+  DisplayValues.enable();
   Serial.println("Initialized scheduler");
 
 
@@ -93,9 +111,9 @@ void setup() {
   bh_input = 100;
   rh_input = 100;
 
-  saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
-  saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
-  saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
+  // saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
+  // saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
+  // saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   
   ih_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   ih_PID.SetMode(AUTOMATIC); //turn the PID on
@@ -105,5 +123,5 @@ void setup() {
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
 
   // MCUSR = 0;
-  wdt_enable(WDTO_1S); //this is to enable watchdog so we can do a software reset every once in a while
+  wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 }

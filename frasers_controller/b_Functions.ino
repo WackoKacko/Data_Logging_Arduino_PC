@@ -21,7 +21,8 @@ void readCO2() {
 
 
 void readHumidity() {
-  humidity = aht.readHumidity();
+  // humidity = aht.readHumidity();
+  if (sht.readSample()) humidity = sht.getHumidity();
   rh_input = humidity;
   // printf("Humidity: %0.1f\n", humidity);
   // return humidity;
@@ -29,7 +30,8 @@ void readHumidity() {
 
 
 void readTemperature() {
-  box_temperature = aht.readTemperature();
+  // box_temperature = aht.readTemperature();
+  if (sht.readSample()) box_temperature = sht.getTemperature();
   bh_input = box_temperature;
   // printf("Box temperature: %0.1f\n", bh_input);
   // printf("Box output: %0.1f\n", bh_output); //this gives null because P, I, and D are nan. Figure out how to make it so that all of them are set to 1 or something else.
@@ -40,6 +42,7 @@ void readTemperature() {
 void angleCalc() {
   angle = fmod((float)millis(), T) * 2 * PI / T + phase_shift;
   saved_parameters.phase_shift = angle;
+  EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
 }
 
 
@@ -75,6 +78,50 @@ void readThermistor() {
 }
 
 
+void displayValues() {
+  display.clearDisplay();
+
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+
+  display.setCursor(0, 0);
+  display.print("CO2=");
+  display.print(co2);
+  display.println("ppm");
+
+  display.setCursor(0, 10);
+  display.print("Temp=");
+  display.print((int)box_temperature);
+  display.println("C");
+
+  display.setCursor(0, 20);
+  display.print("RH=");
+  display.print((int)humidity);
+  display.println("%");
+
+  display.setCursor(65, 0);
+  display.print("SetH20=");
+  display.print((int)saved_parameters.ih.Setpoint);
+  display.println("C");
+
+  display.setCursor(65, 10);
+  display.print("SetBox=");
+  display.print((int)saved_parameters.bh.Setpoint);
+  display.println("C");
+
+  display.setCursor(71, 20);
+  display.print("SetRH=");
+  display.print((int)saved_parameters.rh.Setpoint);
+  display.println("%");
+
+  display.setCursor(40, 25);
+  display.print("ID=");
+  display.println(DEVICE_ID);
+
+  display.display();
+}
+
+
 void flashLED() {
   static unsigned long flash_time;
   if (millis()-flash_time > 50) {
@@ -84,32 +131,32 @@ void flashLED() {
 }
 
 
-void plotSystem() {
-  Serial.print("Input:"); Serial.print(*(system_plotted->myInput)); Serial.print(",");
-  Serial.print("Setpoint:"); Serial.print(*(system_plotted->mySetpoint)); Serial.print(",");
-  Serial.print("Output:"); Serial.print(*(system_plotted->myOutput)/1000); //Serial.print(",");
-  Serial.println();
-}
+// void plotSystem() {
+//   Serial.print("Input:"); Serial.print(*(system_plotted->myInput)); Serial.print(",");
+//   Serial.print("Setpoint:"); Serial.print(*(system_plotted->mySetpoint)); Serial.print(",");
+//   Serial.print("Output:"); Serial.print(*(system_plotted->myOutput)/1000); //Serial.print(",");
+//   Serial.println();
+// }
 
-void plotSystems() {
-  Serial.print("BoxIn:"); Serial.print(*bh_PID.myInput); Serial.print(",");
-  Serial.print("BoxSetP:"); Serial.print(saved_parameters.bh.Setpoint); Serial.print(",");
- // Serial.print("BoxOut:"); Serial.print(*bh_PID.myOutput/1000); Serial.print(",");
-  Serial.print("ImmIn:"); Serial.print(*ih_PID.myInput); Serial.print(",");
-  Serial.print("ImmSetP:"); Serial.print(saved_parameters.ih.Setpoint); Serial.print(",");
-  // Serial.print("ImmOut:"); Serial.print(*ih_PID.myOutput/1000); Serial.print(",");
-  Serial.print("RHIn:"); Serial.print(*rh_PID.myInput); Serial.print(",");
-  Serial.print("RHSetP:"); Serial.print(saved_parameters.rh.Setpoint); Serial.print(",");
-  Serial.print("RHOut:"); Serial.print(*rh_PID.myOutput/1000); //Serial.print(",");
-  Serial.println();
-}
+// void plotSystems() {
+//   Serial.print("BoxIn:"); Serial.print(*bh_PID.myInput); Serial.print(",");
+//   Serial.print("BoxSetP:"); Serial.print(saved_parameters.bh.Setpoint); Serial.print(",");
+//  // Serial.print("BoxOut:"); Serial.print(*bh_PID.myOutput/1000); Serial.print(",");
+//   Serial.print("ImmIn:"); Serial.print(*ih_PID.myInput); Serial.print(",");
+//   Serial.print("ImmSetP:"); Serial.print(saved_parameters.ih.Setpoint); Serial.print(",");
+//   // Serial.print("ImmOut:"); Serial.print(*ih_PID.myOutput/1000); Serial.print(",");
+//   Serial.print("RHIn:"); Serial.print(*rh_PID.myInput); Serial.print(",");
+//   Serial.print("RHSetP:"); Serial.print(saved_parameters.rh.Setpoint); Serial.print(",");
+//   Serial.print("RHOut:"); Serial.print(*rh_PID.myOutput/1000); //Serial.print(",");
+//   Serial.println();
+// }
 
 
 void handleUserInput() {
   String user_input = Serial.readString(); //Read user input string
   user_input.trim(); //Remove trailing whitespace characters
   Serial.print("Received: "); Serial.println(user_input);
-
+  // wdt_reset();
   PID_params* actuator;//, actuator_flash;
   PID* process;
   char first_char = user_input.charAt(0); // Get the first character
@@ -129,10 +176,10 @@ void handleUserInput() {
   } else if (first_char == 'z') {
     phase_shift = 0; //NOTE!!! THIS DOES NOT RESET SETPOINT TO ZERO, JUST GETS RID OF PHASE SHIFT. THIS IS BECAUSE SINUSOIDAL SETPOINT IS A FUNCTION OF millis()! NEED TO IMPLEMENT A BUFFER OR SOMETHING IN angleCalc() IF YOU WANT THAT FUNCTIONALITY!!
     Serial.println("Phase Shift zeroed.");
-  }  else {
+  } else {
     Serial.println("Invalid input first char");
   }
-
+  // wdt_reset();
   double* parameter;//, parameter_flash;
   char param_name[12];
   char second_char = user_input.charAt(1); // Get the second character
@@ -151,7 +198,7 @@ void handleUserInput() {
   } else {
     Serial.println("Invalid input second char");
   }
-    
+  // wdt_reset();
   String remaining_string = user_input.substring(2);  // Get the remaining part of the string
   if (remaining_string == "?") {
     printf("%s=%0.1f for %s\n", param_name, *parameter, actuator_name);
@@ -180,7 +227,7 @@ void handleUserInput() {
   } else {
     Serial.println("Invalid rest of input");
   }
-
+  // wdt_reset();
   process->SetTunings(actuator->Kp, actuator->Ki, actuator->Kd); //update PID system with new settings
   EEPROM.put(flash_address, saved_parameters); //save parameters to flash memory
 }

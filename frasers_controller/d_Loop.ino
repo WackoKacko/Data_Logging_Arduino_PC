@@ -2,11 +2,13 @@
 void loop() {
   Runner.execute(); //handles sensor readings and sending data over Serial
 
+  wdt_reset(); //keeps watchdog from performing a software reset
   if (Serial.available() > 0) handleUserInput();
+  wdt_reset(); //one more time just in case handling serial input takes a long time
+  
 
-  // if ( millis() > T-2000 ) delay(2000); //software reset of Arduino using watchdog timer
   if ( millis() > WATCHDOG_TIMEOUT_PERIOD ) delay(5000); //software reset of Arduino using watchdog timer
-  else wdt_reset(); //avoid watchdog timer reset
+
 
  //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
   rh_PID.Compute();
