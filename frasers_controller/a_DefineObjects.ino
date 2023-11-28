@@ -108,4 +108,4 @@ float rh_a = (RH_MAX - RH_MIN) / 2; float rh_b = (RH_MAX + RH_MIN) / 2;
 
 PID* system_plotted = &ih_PID; //edit this to plot other systems
 
-const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes
+const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes = 1.8e6 ms.
