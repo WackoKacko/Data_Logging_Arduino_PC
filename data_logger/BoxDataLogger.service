@@ -1,0 +1,17 @@
+[Unit]
+Description=BoxDataLogger
+After=network.target
+
+[Service]
+Environment="INFLUXDB_TOKEN="
+Environment="INFLUXDB_BUCKET=test"
+WorkingDirectory=/home/erik/heimdal-box/data_logger
+ExecStart=/home/erik/heimdal-env/bin/python /home/erik/heimdal-box/data_logger/app.py
+Type=notify
+WatchdogSec=60s
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
