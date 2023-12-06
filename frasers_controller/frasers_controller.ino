@@ -23,13 +23,16 @@
 #include <ArduinoJson.h>        //built-in (https://github.com/bblanchon/ArduinoJson) <- I think that's the correct repo
 #include "PID_v1.h"             //https://github.com/br3ttb/Arduino-PID-Library/tree/master
 #include "TaskScheduler.h"      //https://github.com/arkhipenko/TaskScheduler/tree/master
-#include "AHTxx.h"              //https://github.com/enjoyneering/AHTxx/tree/main
+// #include "AHTxx.h"              //https://github.com/enjoyneering/AHTxx/tree/main
+#include "SHTSensor.h"      //???
 #include "SparkFun_SCD4x_Arduino_Library.h"  //https://github.com/sparkfun/SparkFun_SCD4x_Arduino_Library/tree/main
 // #include "ADS1115-Driver.h"     //https://github.com/Wh1teRabbitHU/ADS1115-Driver
 // #include "Dimmer.h"             // https://github.com/circuitar/Dimmer  
 #include <LibPrintf.h>            // https://github.com/embeddedartistry/arduino-printf
 #include <EEPROM.h>               // built-in (https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM)
-#include <avr/wdt.h>
+#include <Watchdog.h>              //installed from library manager. https://www.arduino.cc/reference/en/libraries/watchdog/
+#include <Adafruit_GFX.h> //installed from library manager, idk
+#include <Adafruit_SSD1306.h> //installed from library manager, idk
 
 // The following pins are used... (for the Arduino Nano Every)
 #define SOLENOID_VALVE_RELAY_PIN 3
@@ -38,6 +41,7 @@
 #define THERMISTOR_PIN 14 //(A0)
 #define WATER_LEVEL_PIN 21 //(A7)
 
+const unsigned int DEVICE_ID = 1;
 
 // // The following pins are used... (for the ESP32)
 // #define SOLENOID_VALVE_RELAY_PIN 26
