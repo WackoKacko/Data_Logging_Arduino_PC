@@ -3,6 +3,8 @@
 import logging.handlers
 import os
 
+from systemd.daemon import notify
+
 # existing environment variables
 INFLUXDB_HOST = os.getenv('INFLUXDB_HOST', 'localhost')
 INFLUXDB_PORT = int(os.getenv('INFLUXDB_PORT', 8086))
@@ -18,6 +20,18 @@ RECONNECT_ATTEMPTS = int(os.getenv('RECONNECT_ATTEMPTS', 60))
 LOG_FILE_PATH = os.getenv('LOG_FILE_PATH', '/var/log/box-logger/app.log')
 PORTS_RE = os.getenv('PORTS_RE', 'ttyACM*')
 WAIT_FOR_PORTS_ATTEMPTS = int(os.getenv('WAIT_FOR_PORTS_ATTEMPTS', 60))
+DATA_LOG_PATH = os.getenv('DATA_LOG_PATH', 'data_log')
+
+NOTIFY_READY = "READY=1"
+NOTIFY_WATCHDOG = "WATCHDOG=1"
+NOTIFY_SOCKET = "NOTIFY_SOCKET"
+
+
+def notify_systemd(state):
+    """Send a notification to systemd."""
+    if NOTIFY_SOCKET in os.environ:
+        notify(state)
+
 
 # create logger
 logger = logging.getLogger(__name__)
