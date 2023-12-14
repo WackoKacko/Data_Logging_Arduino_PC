@@ -41,7 +41,7 @@
 #define THERMISTOR_PIN 14 //(A0)
 #define WATER_LEVEL_PIN 21 //(A7)
 
-const unsigned int DEVICE_ID = 1;
+const unsigned int DEVICE_ID = 4;
 
 // // The following pins are used... (for the ESP32)
 // #define SOLENOID_VALVE_RELAY_PIN 26

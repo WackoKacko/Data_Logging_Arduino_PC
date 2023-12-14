@@ -15,8 +15,8 @@ void loop() {
   if (rh_output > WINDOW_SIZE-MIN_WINDOW) rh_output = WINDOW_SIZE; //quickest change 0.5s
   else if (rh_output <= MIN_WINDOW) rh_output = 0; //quickest change 0.5s
   if (millis() - rh_start > WINDOW_SIZE) rh_start += WINDOW_SIZE; //time to shift the Relay Window
-  if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW); //window on time
-  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window off time
+  if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
+  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
 
   if(digitalRead(WATER_LEVEL_PIN)) { //if no water in the cup, turn off immersion heater and flash LED as an alert
     flashLED();
