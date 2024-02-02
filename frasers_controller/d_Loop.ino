@@ -18,19 +18,19 @@ void loop() {
   if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
 
-  if(digitalRead(WATER_LEVEL_PIN)) { //if no water in the cup, turn off immersion heater and flash LED as an alert
-    flashLED();
-    digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); 
-  }
-  else {
-    digitalWrite(LED_BUILTIN, LOW);
-    ih_PID.Compute();
-    if (ih_output > WINDOW_SIZE-MIN_WINDOW) ih_output = WINDOW_SIZE; //can change no faster than MIN_WINDOW
-    else if (ih_output <= MIN_WINDOW) ih_output = 0; //can change no faster than WINDOW_SIZE
-    if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
-    if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
-    else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
-  }
+  // if(digitalRead(WATER_LEVEL_PIN)) digitalWrite(LED_BUILTIN, HIGH); //if no water in the cup, turn off immersion heater and flash LED as an alert
+  // else digitalWrite(LED_BUILTIN, LOW);
+  //   digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); 
+  // }
+  // else {
+    // digitalWrite(LED_BUILTIN, LOW);
+  ih_PID.Compute();
+  if (ih_output > WINDOW_SIZE-MIN_WINDOW) ih_output = WINDOW_SIZE; //can change no faster than MIN_WINDOW
+  else if (ih_output <= MIN_WINDOW) ih_output = 0; //can change no faster than WINDOW_SIZE
+  if (millis() - ih_start > WINDOW_SIZE) ih_start += WINDOW_SIZE; //time to shift the Relay Window (ih_start = millis() also works)
+  if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
+  else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
+  // }
 
   bh_PID.Compute();
   if (bh_output > WINDOW_SIZE-MIN_WINDOW) bh_output = WINDOW_SIZE; //quickest change 0.5s

@@ -80,7 +80,6 @@ void readThermistor() {
 
 void displayValues() {
   display.clearDisplay();
-
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 
@@ -98,11 +97,11 @@ void displayValues() {
   display.print("RH=");
   display.print((int)humidity);
   display.println("%");
-
-  display.setCursor(65, 0);
-  display.print("SetH20=");
-  display.print((int)saved_parameters.ih.Setpoint);
-  display.println("C");
+    
+  if(digitalRead(WATER_LEVEL_PIN)) {
+    display.setCursor(65, 0);
+    display.println("WATER LOW!");
+  }
 
   display.setCursor(65, 10);
   display.print("SetBox=");
@@ -117,18 +116,8 @@ void displayValues() {
   display.setCursor(40, 25);
   display.print("ID=");
   display.println(DEVICE_ID);
-
+  
   display.display();
-}
-
-
-void flashLED() {
-  static unsigned long flash_time;
-  if (millis()-flash_time > 50) {
-    digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
-    flash_time = millis();
-  }
-  Serial.println(F("WATER TOO LOW."));
 }
 
 
