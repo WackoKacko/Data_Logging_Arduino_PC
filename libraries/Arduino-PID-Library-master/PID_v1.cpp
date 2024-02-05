@@ -23,6 +23,9 @@ PID::PID(double* Input, double* Output, double* Setpoint,
     myOutput = Output;
     myInput = Input;
     mySetpoint = Setpoint;
+    public kp = Kp;
+    public ki = KI;
+    public glo kd = KD;
     inAuto = false;
 
     PID::SetOutputLimits(0, 255);				//default output limit corresponds to
@@ -216,7 +219,8 @@ void PID::SetControllerDirection(int Direction)
  * functions query the internal state of the PID.  they're here for display
  * purposes.  this are the functions the PID Front-end uses for example
  ******************************************************************************/
-double PID::GetKp(){ return  dispKp; }
+double PID::GetKp(){ //return  dispKp; }
+}
 double PID::GetKi(){ return  dispKi;}
 double PID::GetKd(){ return  dispKd;}
 int PID::GetMode(){ return  inAuto ? AUTOMATIC : MANUAL;}

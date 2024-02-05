@@ -10,7 +10,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 //Sensors
 SCD4x scd41;
 // AHTxx aht(AHTXX_ADDRESS_X38, AHT1x_SENSOR); //sensor address, sensor type (aht10)
-// AHTxx aht(AHTXX_ADDRESS_X38, AHT2x_SENSOR); //(aht21)
+AHTxx aht(AHTXX_ADDRESS_X38, AHT2x_SENSOR); //(aht21)
 SHTSensor sht;
 
 //Global variables
@@ -30,13 +30,8 @@ void readHumidity();
 void readTemperature();
 void readThermistor();
 void handleUserInput();
-// void plotSystem();
-// void plotSystems();
-void angleCalc();
-void ihSinusoidSetpoint();
-void bhSinusoidSetpoint();
-void rhSinusoidSetpoint();
 void displayValues();
+void setTempRH();
 
 //Tasks
 Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
@@ -44,68 +39,22 @@ Task CheckRH(1*1000, TASK_FOREVER, &readHumidity); //check relative humidity eve
 Task CheckWaterTemp(1*1000, TASK_FOREVER, &readTemperature); //check water temperature every 2 seconds
 Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
-// Task PlotSystem(200, TASK_FOREVER, &plotSystem);
-// Task PlotSystems(200, TASK_FOREVER, &plotSystems);
-Task AngleCalc(1*1000, TASK_FOREVER, &angleCalc);
-Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);
-Task BhSinusoidSetpoint(1*1000, TASK_FOREVER, &bhSinusoidSetpoint);
-Task RhSinusoidSetpoint(1*1000, TASK_FOREVER, &rhSinusoidSetpoint);
+Task SetTempRH(2*1000, TASK_FOREVER, &setTempRH); //copy AHT2X readings from outside to be setpoint for inside environment
 Task DisplayValues(1*1000, TASK_FOREVER, &displayValues);
 
-
-//PID
-typedef struct { // Define PID parameters to store in memory
-  double Kp;
-  double Ki;
-  double Kd;
-  double Setpoint;
-} PID_params;
-
-typedef struct { // Group PID parameters by system
-  PID_params ih;
-  PID_params bh;
-  PID_params rh;
-  double phase_shift;
-} PID_systems;
-
-// PID_params default_params = { // Define default PID parameters (Kp, Ki, Kd, Setpoint)
-//   1.0, 1.0, 1.0, 1.0,
-// };
-
-// PID_systems default_systems = {
-//   default_params, // ih
-//   default_params, // bh
-//   default_params  // rh
-// };
-
-PID_systems saved_parameters; // Create global object to store PID settings in flash
-int flash_address = 0; // EEPROM address where PID parameters are stored
-
-double ih_input, ih_output; // ("ih" stands for "immersion heater")
-PID ih_PID(&ih_input, &ih_output, &(saved_parameters.ih.Setpoint), 1, 1, 1, DIRECT);
+double ih_input, ih_output, ih_setpoint; // ("ih" stands for "immersion heater")
+PID ih_PID(&ih_input, &ih_output, &ih_setpoint, 1000, 500, 100, DIRECT); //everything comes out initialized as zero.
 unsigned long ih_start;
 
-double bh_input, bh_output; // ("bh" stands for "box heater")
-PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), 1, 1, 1, DIRECT);
+double bh_input, bh_output, bh_setpoint; // ("bh" stands for "box heater")
+PID bh_PID(&bh_input, &bh_output, &bh_setpoint, 600, 500, 100, DIRECT);
 unsigned long bh_start;
 
-double rh_input, rh_output; // ("rh" stands for "relative humidity")
-PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), 1, 1, 1, DIRECT);
+double rh_input, rh_output, rh_setpoint; // ("rh" stands for "relative humidity")
+PID rh_PID(&rh_input, &rh_output, &rh_setpoint, 1000, 500, 100, DIRECT);
 unsigned long rh_start;
 
 const unsigned int MIN_WINDOW = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
-
-const int IH_MAX = 25, IH_MIN = 25; //max and min water temperature
-const int BH_MAX = 25, BH_MIN = 25; //max and min box temperature
-const int RH_MAX = 35, RH_MIN = 35; //max and min relative humidity
-const unsigned long T = 8.64e7; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
-float angle, phase_shift;
-
-float ih_a = (IH_MAX - IH_MIN) / 2; float ih_b = (IH_MAX + IH_MIN) / 2;
-float bh_a = (BH_MAX - BH_MIN) / 2; float bh_b = (BH_MAX + BH_MIN) / 2;
-float rh_a = (RH_MAX - RH_MIN) / 2; float rh_b = (RH_MAX + RH_MIN) / 2;
-
-PID* system_plotted = &ih_PID; //edit this to plot other systems
 
 const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes = 1.8e6 ms.
