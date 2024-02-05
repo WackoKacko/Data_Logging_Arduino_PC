@@ -23,11 +23,8 @@
 #include <ArduinoJson.h>        //built-in (https://github.com/bblanchon/ArduinoJson) <- I think that's the correct repo
 #include "PID_v1.h"             //https://github.com/br3ttb/Arduino-PID-Library/tree/master
 #include "TaskScheduler.h"      //https://github.com/arkhipenko/TaskScheduler/tree/master
-// #include "AHTxx.h"              //https://github.com/enjoyneering/AHTxx/tree/main
 #include "SHTSensor.h"      //???
 #include "SparkFun_SCD4x_Arduino_Library.h"  //https://github.com/sparkfun/SparkFun_SCD4x_Arduino_Library/tree/main
-// #include "ADS1115-Driver.h"     //https://github.com/Wh1teRabbitHU/ADS1115-Driver
-// #include "Dimmer.h"             // https://github.com/circuitar/Dimmer  
 #include <LibPrintf.h>            // https://github.com/embeddedartistry/arduino-printf
 #include <EEPROM.h>               // built-in (https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM)
 #include <Watchdog.h>              //installed from library manager. https://www.arduino.cc/reference/en/libraries/watchdog/
@@ -42,12 +39,3 @@
 #define WATER_LEVEL_PIN 21 //(A7)
 
 const unsigned int DEVICE_ID = 4;
-
-// // The following pins are used... (for the ESP32)
-// #define SOLENOID_VALVE_RELAY_PIN 26
-// #define BOX_HEATER_RELAY_PIN 27
-// #define IMMERSION_HEATER_RELAY_PIN 28
-// #define THERMISTOR_PIN 18
-
-
-// I2C Pins depend on the MCU used. On the ESP32, they are SCL=22, SDA=21. On the Arduino Nano Every, they are SCL=19, SDA=18.

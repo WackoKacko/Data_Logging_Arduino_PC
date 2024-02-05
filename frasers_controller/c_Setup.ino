@@ -15,22 +15,11 @@ void setup() {
   //Little I2C Screen
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
-    // for(;;);
   }
   else Serial.println(F("Screen ok!"));
   display.display(); // Display splash screen
   delay(500);
   display.clearDisplay();
-
-
-  // //AHT10 sensor start
-  // while (aht.begin() != true) { //begin AHT10 sensor
-  //   Serial.println("AHT1x not connected or fail to load calibration coefficient");
-  //   delay(5000);
-  // }
-  // Serial.println("AHT OK");
-  // aht.softReset();
-  // delay(200);
 
 
   // SHT30 sensor start
@@ -61,8 +50,6 @@ void setup() {
   Runner.addTask(CheckWaterTemp);
   Runner.addTask(CheckBoxTemp);
   Runner.addTask(SendJson);
-  // Runner.addTask(PlotSystem);
-  // Runner.addTask(PlotSystems);
   Runner.addTask(AngleCalc);
   Runner.addTask(IhSinusoidSetpoint);
   Runner.addTask(BhSinusoidSetpoint);
@@ -73,8 +60,6 @@ void setup() {
   CheckWaterTemp.enable();
   CheckBoxTemp.enable();
   SendJson.enable();
-  // PlotSystem.enable();
-  // PlotSystems.enable();
   AngleCalc.enable();
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
@@ -85,25 +70,12 @@ void setup() {
 
   //PID
   EEPROM.get(flash_address, saved_parameters); //Check if any of parameters are "nan"
-  if (isnan(saved_parameters.ih.Kp)) saved_parameters.ih.Kp = 0;
-  if (isnan(saved_parameters.ih.Ki)) saved_parameters.ih.Ki = 0;
-  if (isnan(saved_parameters.ih.Kd)) saved_parameters.ih.Kd = 0;
   if (isnan(saved_parameters.ih.Setpoint)) saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
-  if (isnan(saved_parameters.bh.Kp)) saved_parameters.bh.Kp = 0;
-  if (isnan(saved_parameters.bh.Ki)) saved_parameters.bh.Ki = 0;
-  if (isnan(saved_parameters.bh.Kd)) saved_parameters.bh.Kd = 0;
   if (isnan(saved_parameters.bh.Setpoint)) saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
-  if (isnan(saved_parameters.rh.Kp)) saved_parameters.rh.Kp = 0;
-  if (isnan(saved_parameters.rh.Ki)) saved_parameters.rh.Ki = 0;
-  if (isnan(saved_parameters.rh.Kd)) saved_parameters.rh.Kd = 0;
   if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   if (isnan(saved_parameters.phase_shift)) saved_parameters.phase_shift = 0;
   else phase_shift = saved_parameters.phase_shift;
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
-  ih_PID.SetTunings(saved_parameters.ih.Kp, saved_parameters.ih.Ki, saved_parameters.ih.Kd); //update PID system with new settings
-  bh_PID.SetTunings(saved_parameters.bh.Kp, saved_parameters.bh.Ki, saved_parameters.bh.Kd); //update PID system with new settings
-  rh_PID.SetTunings(saved_parameters.rh.Kp, saved_parameters.rh.Ki, saved_parameters.rh.Kd); //update PID system with new settings
-  // ^ PID setpoints get updated automatically. Kp, Ki, and Kd don't.
 
 
   ih_start = millis();
@@ -113,10 +85,6 @@ void setup() {
   ih_input = 100; //higher than anything we'd expect so that nothing happens until first sensor readings
   bh_input = 100;
   rh_input = 100;
-
-  // saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
-  // saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
-  // saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   
   ih_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   ih_PID.SetMode(AUTOMATIC); //turn the PID on
@@ -125,6 +93,5 @@ void setup() {
   rh_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
 
-  // MCUSR = 0;
   wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 }
