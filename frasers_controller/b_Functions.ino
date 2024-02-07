@@ -109,3 +109,18 @@ void displayValues() {
   
   display.display();
 }
+
+void handleUserInput() {
+  String user_input = Serial.readString(); //Read user input string
+  user_input.trim(); //Remove trailing whitespace characters
+  char first_char = user_input.charAt(0); // Get the first character
+
+  if (first_char == 'z') {
+    phase_shift = 0; //NOTE!!! THIS DOES NOT RESET SETPOINT TO ZERO, JUST GETS RID OF PHASE SHIFT. THIS IS BECAUSE SINUSOIDAL SETPOINT IS A FUNCTION OF millis()! NEED TO IMPLEMENT A BUFFER OR SOMETHING IN angleCalc() IF YOU WANT THAT FUNCTIONALITY!!
+    Serial.println("Phase Shift zeroed.");
+  } else {
+    Serial.println("Invalid input first char");
+  }
+  
+  EEPROM.put(flash_address, saved_parameters); //save parameters to flash memory
+}
