@@ -47,7 +47,7 @@ PID ih_PID(&ih_input, &ih_output, &ih_setpoint, 1000, 500, 100, DIRECT); //every
 unsigned long ih_start;
 
 double bh_input, bh_output, bh_setpoint; // ("bh" stands for "box heater")
-PID bh_PID(&bh_input, &bh_output, &bh_setpoint, 600, 500, 100, DIRECT);
+PID bh_PID(&bh_input, &bh_output, &bh_setpoint, 400, 400, 100, DIRECT);
 unsigned long bh_start;
 
 double rh_input, rh_output, rh_setpoint; // ("rh" stands for "relative humidity")
