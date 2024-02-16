@@ -3,6 +3,7 @@
 import logging.handlers
 import os
 
+import sentry_sdk
 from systemd.daemon import notify
 
 # existing environment variables
@@ -18,13 +19,18 @@ PORT_RECONNECT_DELAY = int(os.getenv('PORT_RECONNECT_DELAY', 1))
 PORT_SCAN_INTERVAL = int(os.getenv('PORT_SCAN_INTERVAL', 10))
 RECONNECT_ATTEMPTS = int(os.getenv('RECONNECT_ATTEMPTS', 60))
 LOG_FILE_PATH = os.getenv('LOG_FILE_PATH', '/var/log/box-logger/app.log')
-PORTS_RE = os.getenv('PORTS_RE', 'ttyACM*')
+PORTS_RE = os.getenv('PORTS_RE', 'ttyACM*|ttyUSB*')
 WAIT_FOR_PORTS_ATTEMPTS = int(os.getenv('WAIT_FOR_PORTS_ATTEMPTS', 60))
 DATA_LOG_PATH = os.getenv('DATA_LOG_PATH', 'data_log')
+NO_BOXES_TIMEOUT = int(os.getenv('NO_BOXES_TIMEOUT', 60* 5))  # 5 minutes
 
 NOTIFY_READY = "READY=1"
 NOTIFY_WATCHDOG = "WATCHDOG=1"
 NOTIFY_SOCKET = "NOTIFY_SOCKET"
+
+SENTRY_DSN = os.getenv('SENTRY_DSN', 'https://84ce1983583627baa346f1b2366da01b@o1409994.ingest.sentry.io/4506394675380224')
+
+sentry_sdk.init(dsn=SENTRY_DSN)
 
 
 def notify_systemd(state):
