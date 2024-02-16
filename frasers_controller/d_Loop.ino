@@ -12,8 +12,8 @@ void loop() {
   if (rh_output > WINDOW_SIZE-MIN_WINDOW) rh_output = WINDOW_SIZE; //quickest change 0.5s
   else if (rh_output <= MIN_WINDOW) rh_output = 0; //quickest change 0.5s
   if (millis() - rh_start > WINDOW_SIZE) rh_start += WINDOW_SIZE; //time to shift the Relay Window
-  if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
-  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
+  if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, !HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
+  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, !LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
 
   ih_PID.Compute();
   if (ih_output > WINDOW_SIZE-MIN_WINDOW) ih_output = WINDOW_SIZE; //can change no faster than MIN_WINDOW
