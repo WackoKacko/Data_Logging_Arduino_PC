@@ -84,4 +84,4 @@ float ih_a = (IH_MAX - IH_MIN) / 2; float ih_b = (IH_MAX + IH_MIN) / 2;
 float bh_a = (BH_MAX - BH_MIN) / 2; float bh_b = (BH_MAX + BH_MIN) / 2;
 float rh_a = (RH_MAX - RH_MIN) / 2; float rh_b = (RH_MAX + RH_MIN) / 2;
 
-const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes = 1.8e6 ms.
+const unsigned long WATCHDOG_TIMEOUT_PERIOD = 3.0e5; //30 minutes = 1.8e6 ms.
