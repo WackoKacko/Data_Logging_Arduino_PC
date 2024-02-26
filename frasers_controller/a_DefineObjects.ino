@@ -78,8 +78,8 @@ const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const int IH_MAX = 25, IH_MIN = 15; //max and min water temperature
-const int BH_MAX = 34.0, BH_MIN = 22.5; //max and min box temperature
-const int RH_MAX = 84.1, RH_MIN = 40.1; //max and min relative humidity
+const int BH_MAX = 31.4, BH_MIN = 18.2; //max and min box temperature
+const int RH_MAX = 83.6, RH_MIN = 38.2; //max and min relative humidity
 const unsigned long T = 8.64e7; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
 float angle, phase_shift;
 
