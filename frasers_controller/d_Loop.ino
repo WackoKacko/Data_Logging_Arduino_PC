@@ -10,14 +10,16 @@ void loop() {
  //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
   rh_PID.Compute();
   if (millis() - rh_start > WINDOW_SIZE) rh_start = millis(); //time to shift the Relay Window
-  if (millis() - last_change >= MIN_CHANGE_TIME) {
-    if (rh_output < millis() - rh_start) {
-      if (digitalRead(SOLENOID_VALVE_RELAY_PIN)) last_change = millis(); //if state is high, we are about to have a change. Update the time of the last change.
-      digitalWrite(SOLENOID_VALVE_RELAY_PIN, !HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
+  if (rh_output < millis() - rh_start) {
+    if (digitalRead(SOLENOID_VALVE_RELAY_PIN) == HIGH && millis() - last_change >= MIN_CHANGE_TIME) {
+      digitalWrite(SOLENOID_VALVE_RELAY_PIN, !HIGH); //window off time (INVERTED LOGIC SOLENOID VS SSR)
+      last_change = millis(); // Update the time of the last change
     }
-    else {
-      if(!digitalRead(SOLENOID_VALVE_RELAY_PIN)) last_change = millis();  //if state is low, we are about to have a change. Update the time of the last change.
+  }
+  else {
+    if (digitalRead(SOLENOID_VALVE_RELAY_PIN) == LOW && millis() - last_change >= MIN_CHANGE_TIME) {
       digitalWrite(SOLENOID_VALVE_RELAY_PIN, !LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
+      last_change = millis(); // Update the time of the last change
     }
   }
 
