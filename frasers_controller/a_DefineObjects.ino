@@ -67,14 +67,14 @@ PID ih_PID(&ih_input, &ih_output, &(saved_parameters.ih.Setpoint), 1000, 500, 10
 unsigned long ih_start;
 
 double bh_input, bh_output; // ("bh" stands for "box heater")
-PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), 300, 300, 100, DIRECT);
+PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), 600, 500, 100, DIRECT);
 unsigned long bh_start;
 
 double rh_input, rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), 1000, 500, 100, DIRECT);
-unsigned long rh_start;
+unsigned long rh_start, last_change;
 
-const unsigned int MIN_WINDOW = 500;
+const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const int IH_MAX = 35, IH_MIN = 35; //max and min water temperature
