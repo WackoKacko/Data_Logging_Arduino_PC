@@ -52,9 +52,9 @@ unsigned long bh_start;
 
 double rh_input, rh_output, rh_setpoint; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &rh_setpoint, 1000, 500, 100, DIRECT);
-unsigned long rh_start;
+unsigned long rh_start, last_change;
 
-const unsigned int MIN_WINDOW = 500;
+const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const unsigned long WATCHDOG_TIMEOUT_PERIOD = 1.8e6; //30 minutes = 1.8e6 ms.
