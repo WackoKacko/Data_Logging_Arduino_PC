@@ -8,13 +8,10 @@ void loop() {
   if ( millis() > WATCHDOG_TIMEOUT_PERIOD ) delay(5000); //software reset of Arduino using watchdog timer
 
  //*NOTE: trying inverting "digitalWrite(..., HIGH)" and "digitalWrite(..., LOW)" if you are seeing unexpected behavior.
-
-  if (millis() - rh_start > WINDOW_SIZE) {
-    rh_start = millis();// WINDOW_SIZE; //time to shift the Relay Window
-    rh_PID.Compute();
-  }
-  if (rh_output < millis() - rh_start) digitalWrite(SOLENOID_VALVE_RELAY_PIN, !HIGH);
-  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, !LOW);
+  rh_PID.Compute();
+  if (millis() - rh_start > WINDOW_SIZE) rh_start = millis();// WINDOW_SIZE; //time to shift the Relay Window
+  if (rh_output > millis() - rh_start && rh_output > 500) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
+  else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
   ih_PID.Compute();
   if (millis() - ih_start > WINDOW_SIZE) ih_start = millis(); //time to shift the Relay Window (ih_start = millis() also works)
