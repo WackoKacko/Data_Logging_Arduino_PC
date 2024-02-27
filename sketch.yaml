@@ -1,5 +1,5 @@
 profiles:
-  boxes:
+  default_profile:
     fqbn: arduino:megaavr:nona4809
     platforms:
       - platform: arduino:megaavr (1.8.8)
