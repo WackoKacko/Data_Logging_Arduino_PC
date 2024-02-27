@@ -14,9 +14,8 @@ profiles:
       - Adafruit GFX Library (1.11.9) # https://github.com/adafruit/Adafruit-GFX-Library
       - Adafruit SSD1306 (2.5.9) # https://github.com/adafruit/Adafruit_SSD1306
       - WatchDog (1.2.0) # https://github.com/nadavmatalon/WatchDog
-      - 
 
-# might have to add these built-in librariees:
-#EEPROM: https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM
-#math: https://github.com/codebendercc/arduino-core-files/blob/master/v105/hardware/tools/avr/lib/avr/include/math.h
-#Wire: https://github.com/arduino/ArduinoCore-avr/blob/master/libraries/Wire/src/Wire.h
+# might have to add these built-in libraries:
+# EEPROM: https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM
+# math: https://github.com/codebendercc/arduino-core-files/blob/master/v105/hardware/tools/avr/lib/avr/include/math.h
+# Wire: https://github.com/arduino/ArduinoCore-avr/blob/master/libraries/Wire/src/Wire.h
