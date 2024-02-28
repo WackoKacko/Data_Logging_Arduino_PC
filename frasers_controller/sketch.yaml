@@ -7,7 +7,7 @@ profiles:
       - platform: arduino:megaavr (1.8.8)
     libraries:
       - LibPrintf (1.2.13) # https://github.com/embeddedartistry/arduino-printf
-      - PID (1.2.1) # http://playground.arduino.cc/Code/PIDLibrary
+      - PID (1.2.0) # http://playground.arduino.cc/Code/PIDLibrary
       - ArduinoJson (6.21.3) # https://github.com/bblanchon/ArduinoJson.git
       #- AHT1x/AHT2x (1.2.0) # https://github.com/enjoyneering/AHTxx
       - arduino-sht (1.2.3) # https://developer.sensirion.com
