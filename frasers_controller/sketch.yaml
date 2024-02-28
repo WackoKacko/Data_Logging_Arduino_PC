@@ -15,7 +15,7 @@ profiles:
       - TaskScheduler (3.7.0) # https://github.com/arkhipenko/TaskScheduler.git
       - Adafruit GFX Library (1.11.9) # https://github.com/adafruit/Adafruit-GFX-Library
       - Adafruit SSD1306 (2.5.9) # https://github.com/adafruit/Adafruit_SSD1306
-      - WatchDog (1.2.0) # https://github.com/nadavmatalon/WatchDog
+      - Watchdog (3.0.2) # https://github.com/janelia-arduino/Watchdog
 
 # might have to add these built-in libraries:
 # EEPROM: https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM
