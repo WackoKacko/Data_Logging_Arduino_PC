@@ -13,6 +13,7 @@ profiles:
       - arduino-sht (1.2.3) # https://developer.sensirion.com
       - SparkFun SCD4x Arduino Library (1.1.2) # https://github.com/sparkfun/SparkFun_SCD4x_Arduino_Library
       - TaskScheduler (3.7.0) # https://github.com/arkhipenko/TaskScheduler.git
+      - Adafruit BusIO (1.15.0) # Dependency for AdaFruit GFX
       - Adafruit GFX Library (1.11.9) # https://github.com/adafruit/Adafruit-GFX-Library
       - Adafruit SSD1306 (2.5.9) # https://github.com/adafruit/Adafruit_SSD1306
       - Watchdog (3.0.2) # https://github.com/janelia-arduino/Watchdog
