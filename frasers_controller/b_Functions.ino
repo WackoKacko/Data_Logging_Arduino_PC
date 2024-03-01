@@ -38,15 +38,15 @@ void angleCalc() {
 
 
 void ihSinusoidSetpoint() { 
-  saved_parameters.ih.Setpoint = ih_a * sin(angle) + ih_b;
+  saved_parameters.ih.Setpoint = ih_a * cos(angle) + ih_b; //have as cosine instead of sin so that I can upload code at noon and have it synced to real-life day/night cycle. for sine, would need to upload at 6am.
 }
 
 void bhSinusoidSetpoint() {
-  saved_parameters.bh.Setpoint = bh_a * sin(angle) + bh_b;
+  saved_parameters.bh.Setpoint = bh_a * cos(angle) + bh_b;
 }
 
 void rhSinusoidSetpoint() {
-  saved_parameters.rh.Setpoint = rh_a * sin(angle) + rh_b;
+  saved_parameters.rh.Setpoint = rh_a * cos(angle) + rh_b;
 }
 
 

@@ -75,8 +75,6 @@ void setup() {
   if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
   if (isnan(saved_parameters.phase_shift)) saved_parameters.phase_shift = 0;
   else phase_shift = saved_parameters.phase_shift;
-  // phase_shift = 41400000;
-  // saved_parameters.phase_shift = 41400000;
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
 
 
