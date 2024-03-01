@@ -9,6 +9,8 @@ import sys
 
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
+import sentry_sdk
+
 import config
 from config import logger
 
@@ -31,7 +33,7 @@ class DataLoggerBase(metaclass=ABCMeta):
 
     """
 
-    REQUIRED_COLUMNS = ['ID', 'co2', '%RH', 'RHSP', 'boxTempC', 'BHSP', 'waterTempC', 'IHSP']
+    REQUIRED_COLUMNS = ['ID'] #, 'co2', '%RH', 'RHSP', 'boxTempC', 'BHSP', 'waterTempC', 'IHSP']
 
     def deserialize_data(self, data: str) -> dict:
         """Deserialize the data into a dict."""
@@ -44,7 +46,8 @@ class DataLoggerBase(metaclass=ABCMeta):
                     return None
             return data_dict
         except json.JSONDecodeError:
-            logger.error(f"Invalid JSON data: {data}")
+            #sentry_sdk.capture_exception()
+            logger.warning(f"Invalid JSON data: {data}")
             return None
 
     def handle_data(self, data: str):
@@ -56,6 +59,7 @@ class DataLoggerBase(metaclass=ABCMeta):
         try:
             self.log_results(data_dict)
         except Exception as e:
+            sentry_sdk.capture_exception(e)
             logger.exception(f"Error logging data: {str(e)}")
 
     @abstractmethod
@@ -69,6 +73,36 @@ class InfluxDataLogger(DataLoggerBase):
     handle_data method is called for each line of data received from the serial port.
     It will deserialize the data into a dict and write it to Influx.
     """
+
+    INFLUX_KEYS_MAP = {
+        "ID": "box_id",
+        "co2": "co2",
+        "%RH": "humidity",
+        "RHSP": "rhsp",
+        "boxTempC": "box_temperature",
+        "BHSP": "bhsp_f",
+        "waterTempC": "water_temperature",
+        "IHSP": "ihsp_f",
+        "co2(ppm)_0": "ambient_co2",
+        "humidity(RH)_0": "ambient_humidity",
+        "temperature(C)_0": "ambient_temperature",
+        "pressure(Pa)_0": "ambient_pressure",
+    }
+
+    INFLUX_KEYS_TYPES = {
+        "RHSP": float,
+        "BHSP": float,
+        "IHSP": float,
+        "boxTempC": float,
+        "waterTempC": float,
+        "%RH": float,
+        "pressure(Pa)_0": float,
+        "temperature(C)_0": float,
+        "humidity(RH)_0": float,
+    }
+
+    BOX_MEASURMENT_NAME = "arduino_box_data"
+    AMBIENT_MEASURMENT_NAME = "ambient_data"
 
     def __init__(
             self,
@@ -95,20 +129,48 @@ class InfluxDataLogger(DataLoggerBase):
         )
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
 
+    def _get_measurement_name(self, box_id: int|str) -> str:
+        """Get the measurement name for the given box id."""
+
+        # We use box IDs greater than 1000 to mark the ambient sensor names
+        #
+        box_id = int(box_id)
+        if box_id >= 10000:
+            return self.AMBIENT_MEASURMENT_NAME
+        else:
+            return self.BOX_MEASURMENT_NAME
+
     def log_results(self, data: dict):
         """Write the results to influx"""
-        point = Point("arduino_box_data") \
-            .tag("box_id", data["ID"]) \
-            .time(time_ns()) \
-            .field("co2", data["co2"]) \
-            .field("humidity", data["%RH"]) \
-            .field("rhsp", data["RHSP"]) \
-            .field("box_temperature", data["boxTempC"]) \
-            .field("bhsp", data["BHSP"]) \
-            .field("water_temperature", data["waterTempC"]) \
-            .field("ihsp", data["IHSP"])
-        self.write_api.write(bucket=self.bucket_name, record=point)
-        logger.info(f"Wrote data to Influx: {data}")
+        box_id = data.get("ID")
+        if not id:
+            logger.error(f"Missing ID in data: {data}")
+            return
+        try:
+            measurement_name = self._get_measurement_name(box_id)
+
+            point = Point(measurement_name) \
+                .tag("box_id", box_id) \
+                .time(time_ns())
+
+            # iterate over all the columns and add them to the point
+            for key, value in data.items():
+                if key == "ID":
+                    continue
+                influx_key = self.INFLUX_KEYS_MAP.get(key)
+                if not influx_key:
+                    logger.error(f"Could not find influx key for column: {key}")
+                    continue
+                # convert the value to the correct type
+                if key in self.INFLUX_KEYS_TYPES:
+                    value = self.INFLUX_KEYS_TYPES[key](value)
+                point = point.field(influx_key, value)
+
+            self.write_api.write(bucket=self.bucket_name, record=point)
+            logger.info(f"Wrote data to Influx: {data}")
+        except Exception as e:
+            sentry_sdk.capture_exception(e)
+            logger.exception(f"Error writing data to Influx: {str(e)}")
 
 
 class RotatingFileDataLogger(DataLoggerBase):

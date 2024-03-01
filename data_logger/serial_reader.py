@@ -1,9 +1,12 @@
 import sys
 import serial
 from serial.tools import list_ports
+import time
 from time import sleep
 import queue
 import threading
+
+import sentry_sdk
 
 import config
 import datalog
@@ -176,13 +179,19 @@ class SerialPortMonitor(threading.Thread):
                  threads: dict,
                  ports: list[str],
                  reading_queue: queue.Queue,
-                 scanning_interval: int = config.PORT_SCAN_INTERVAL):
+                 scanning_interval: int = config.PORT_SCAN_INTERVAL,
+                 alert_on_no_ports: bool = True,
+                 no_ports_timeout: int = config.NO_BOXES_TIMEOUT
+                 ):
         super().__init__()
         self.threads = threads
         self.ports = set(ports)
         self.scanning_interval = scanning_interval
         self.stop_event = threading.Event()
         self.reading_queue = reading_queue
+        self.alert_on_no_ports = alert_on_no_ports
+        self.last_alert_time = 0
+        self.max_time_without_ports = no_ports_timeout
 
     def run(self):
         """Main thread entry point."""
@@ -211,7 +220,7 @@ class SerialPortMonitor(threading.Thread):
             for port_name in available_ports:
                 if port_name not in self.ports and not self.stop_event.is_set():
                     # try to ping the port, if it fails, skip it
-                    if not self.ping_port(port_name):
+                    if not self.ping_port(port_name, timeout=10):
                         continue
 
                     logger.info(f"Port {port_name} is now available, starting the thread...")
@@ -222,6 +231,9 @@ class SerialPortMonitor(threading.Thread):
                     thread.start()
 
             if not self.ports:
+                if self.alert_on_no_ports and time.time() - self.last_alert_time > self.max_time_without_ports:
+                    sentry_sdk.capture_message("No serial ports available! Check the connections.")
+                    self.last_alert_time = time.time()
                 logger.warning("No serial ports found.")
 
             if not self.stop_event.is_set():
@@ -231,7 +243,7 @@ class SerialPortMonitor(threading.Thread):
             # Notify systemd that the service is still alive
             config.notify_systemd(config.NOTIFY_WATCHDOG)
 
-    def scan_serial_ports(self, with_ping: bool = True) -> list[str]:
+    def scan_serial_ports(self, with_ping: bool = True, timeout: int = config.PORT_TIMEOUT) -> list[str]:
         """Scan serial ports and return a list of available ports.
 
         Args:
@@ -245,17 +257,17 @@ class SerialPortMonitor(threading.Thread):
             if self.stop_event.is_set():
                 # thead is exiting, don't scan anymore
                 break
-            if with_ping and not self.ping_port(port.device):
+            if with_ping and not self.ping_port(port.device, timeout=timeout):
                 continue
             available_ports.append(port.device)
         logger.info(f"Found {len(available_ports)}\navailable ports: {available_ports}")
         return available_ports
 
-    def ping_port(self, port_name: str) -> bool:
+    def ping_port(self, port_name: str, timeout: int = config.PORT_TIMEOUT) -> bool:
         """Try to open the port and read a line of data."""
         logger.info(f"Pinging port {port_name}...")
         try:
-            with serial.Serial(port_name, config.BAUD_RATE, timeout=config.PORT_TIMEOUT) as ser:
+            with serial.Serial(port_name, config.BAUD_RATE, timeout=timeout) as ser:
                 line = ser.readline().decode('utf-8').strip()
                 if line:
                     logger.info(f"Successfully pinged port {port_name}")
@@ -316,14 +328,14 @@ class SerialPortManager:
     def wait_for_serial_ports(self):
         """Waits until at least one serial port is available."""
         attempts = 0
-        self.ports = self.port_monitor.scan_serial_ports()
+        self.ports = self.port_monitor.scan_serial_ports(timeout=10000)
         while not self.ports and attempts < self.wait_fror_ports_attempts:
             if self.stop_event.is_set():
                 # app is exiting, don't scan anymore
                 break
             logger.info("No serial ports found, waiting for 10 seconds...")
             sleep(10)
-            self.ports = self.port_monitor.scan_serial_ports()
+            self.ports = self.port_monitor.scan_serial_ports(timeout=10000)
             if self.ports:
                 break
             attempts += 1
