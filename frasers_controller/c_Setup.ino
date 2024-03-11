@@ -69,13 +69,13 @@ void setup() {
 
 
   //PID
-  EEPROM.get(flash_address, saved_parameters); //Check if any of parameters are "nan"
-  if (isnan(saved_parameters.ih.Setpoint)) saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
-  if (isnan(saved_parameters.bh.Setpoint)) saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
-  if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
-  if (isnan(saved_parameters.phase_shift)) saved_parameters.phase_shift = 0;
-  else phase_shift = saved_parameters.phase_shift;
-  EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
+  // EEPROM.get(flash_address, saved_parameters); //Check if any of parameters are "nan"
+  // if (isnan(saved_parameters.ih.Setpoint)) saved_parameters.ih.Setpoint = (IH_MAX + IH_MIN)/2;
+  // if (isnan(saved_parameters.bh.Setpoint)) saved_parameters.bh.Setpoint = (BH_MAX + BH_MIN)/2;
+  // if (isnan(saved_parameters.rh.Setpoint)) saved_parameters.rh.Setpoint = (RH_MAX + RH_MIN)/2;
+  // // if (isnan(saved_parameters.phase_shift)) saved_parameters.phase_shift = 0;
+  // /*else*/ phase_shift = saved_parameters.phase_shift;
+  // EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
 
 
   ih_start = millis();
