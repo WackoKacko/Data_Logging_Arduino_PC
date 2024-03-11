@@ -31,22 +31,22 @@ void readTemperature() {
 
 
 void angleCalc() {
-  angle = fmod((float)millis(), T) * 2 * PI / T + phase_shift;
+  angle = fmod((float)millis(), T) * 2 * PI / T + fmod((float)phase_shift,T);
   saved_parameters.phase_shift = angle;
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
 }
 
 
 void ihSinusoidSetpoint() { 
-  saved_parameters.ih.Setpoint = ih_a * sin(angle) + ih_b;
+  saved_parameters.ih.Setpoint = ih_a * sin(angle+1.5708) + ih_b;
 }
 
 void bhSinusoidSetpoint() {
-  saved_parameters.bh.Setpoint = bh_a * sin(angle) + bh_b;
+  saved_parameters.bh.Setpoint = bh_a * sin(angle+1.5708) + bh_b;
 }
 
 void rhSinusoidSetpoint() {
-  saved_parameters.rh.Setpoint = rh_a * sin(angle) + rh_b;
+  saved_parameters.rh.Setpoint = rh_a * sin(angle+1.5708) + rh_b;
 }
 
 
