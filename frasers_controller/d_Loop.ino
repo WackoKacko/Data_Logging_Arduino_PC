@@ -9,7 +9,7 @@ void loop() {
 
   rh_PID.Compute();
   if (millis() - rh_start > WINDOW_SIZE) rh_start = millis();// WINDOW_SIZE; //time to shift the Relay Window
-  if (rh_output > millis() - rh_start && rh_output > 500) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
+  if (rh_output > millis() - rh_start && rh_output > MIN_CHANGE_TIME) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
   ih_PID.Compute();

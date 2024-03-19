@@ -67,14 +67,14 @@ PID ih_PID(&ih_input, &ih_output, &(saved_parameters.ih.Setpoint), 1000, 500, 10
 unsigned long ih_start;
 
 double bh_input, bh_output; // ("bh" stands for "box heater")
-PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), 300, 300, 100, DIRECT);
+PID bh_PID(&bh_input, &bh_output, &(saved_parameters.bh.Setpoint), 600, 500, 100, DIRECT);
 unsigned long bh_start;
 
 double rh_input, rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), 1000, 500, 100, DIRECT);
 unsigned long rh_start;
 
-const unsigned int MIN_WINDOW = 500;
+const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const unsigned long T = 8.64e7; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
