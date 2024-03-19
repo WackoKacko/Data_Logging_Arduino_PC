@@ -72,7 +72,7 @@ unsigned long bh_start;
 
 double rh_input, rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &(saved_parameters.rh.Setpoint), 1000, 500, 100, DIRECT);
-unsigned long rh_start, last_change;
+unsigned long rh_start;
 
 const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
