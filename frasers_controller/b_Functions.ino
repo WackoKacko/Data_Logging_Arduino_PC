@@ -38,7 +38,7 @@ void angleCalc() {
 
 
 void ihSinusoidSetpoint() { 
-  saved_parameters.ih.Setpoint = ih_a * sin(angle+4.7124) + ih_b; //have as cosine instead of sin so that I can upload code at noon and have it synced to real-life day/night cycle. for sine, would need to upload at 6am.
+  saved_parameters.ih.Setpoint = ih_a * sin(angle+4.7124) + ih_b;
 }
 
 void bhSinusoidSetpoint() {
