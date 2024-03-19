@@ -38,11 +38,11 @@ void angleCalc() {
 
 
 void ihSinusoidSetpoint() { 
-  saved_parameters.ih.Setpoint = ih_a * sin(angle+1.5708) + ih_b;
+  saved_parameters.ih.Setpoint = ih_a * sin(angle+4.7124) + ih_b;
 }
 
 void bhSinusoidSetpoint() {
-  saved_parameters.bh.Setpoint = bh_a * sin(angle+1.5708) + bh_b;
+  saved_parameters.bh.Setpoint = bh_a * sin(angle+4.7124) + bh_b;
 }
 
 void rhSinusoidSetpoint() {
