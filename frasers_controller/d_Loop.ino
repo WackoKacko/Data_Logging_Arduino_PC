@@ -12,7 +12,11 @@ void loop() {
   if (rh_output > millis() - rh_start && rh_output > MIN_CHANGE_TIME) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
-  if(sht.readSample() && water_temperature > -5) {
+  if(!sht.readSample() || (box_temperature == 0 && humidity == 0) || water_temperature < -5) {
+    digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW);
+    digitalWrite(BOX_HEATER_RELAY_PIN, LOW);
+  }
+  else {
     ih_PID.Compute();
     if (millis() - ih_start > WINDOW_SIZE) ih_start = millis(); //time to shift the Relay Window (ih_start = millis() also works)
     if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR). 
@@ -22,9 +26,5 @@ void loop() {
     if (millis() - bh_start > WINDOW_SIZE) bh_start = millis(); //time to shift the Relay Window
     if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
     else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
-  }
-  else {
-    digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW);
-    digitalWrite(BOX_HEATER_RELAY_PIN, LOW);
   }
 }
