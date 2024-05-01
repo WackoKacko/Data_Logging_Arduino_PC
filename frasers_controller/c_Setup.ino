@@ -34,6 +34,12 @@ void setup() {
   scd41.startPeriodicMeasurement();
 
 
+  //BMP280 sensor start
+  if(!bmp.begin()){ Serial.println("BMP init failed!"); /*while(1);*/ }
+  else Serial.println("BMP init success!");
+  bmp.setOversampling(4);
+
+
   //Pins
   pinMode(SOLENOID_VALVE_RELAY_PIN, OUTPUT);
   pinMode(BOX_HEATER_RELAY_PIN, OUTPUT);
@@ -49,6 +55,7 @@ void setup() {
   Runner.addTask(CheckRH);
   Runner.addTask(CheckWaterTemp);
   Runner.addTask(CheckBoxTemp);
+  Runner.addTask(CheckPressure);
   Runner.addTask(SendJson);
   Runner.addTask(AngleCalc);
   Runner.addTask(IhSinusoidSetpoint);
@@ -59,6 +66,7 @@ void setup() {
   CheckRH.enable();
   CheckWaterTemp.enable();
   CheckBoxTemp.enable();
+  CheckPressure.enable();
   SendJson.enable();
   AngleCalc.enable();
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
