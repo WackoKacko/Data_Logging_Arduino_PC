@@ -10,11 +10,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 //Sensors
 SCD4x scd41;
 SHTSensor sht;
-BMP280 bmp;
-
 
 //Global variables
-float box_temperature, humidity, water_temperature, pressure;
+float box_temperature, humidity, water_temperature;
 int co2;
 
 //Json document for sending sensor data.
@@ -29,7 +27,6 @@ void readCO2();
 void readHumidity();
 void readTemperature();
 void readThermistor();
-void readPressure();
 void angleCalc();
 void ihSinusoidSetpoint();
 void bhSinusoidSetpoint();
@@ -41,7 +38,6 @@ Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
 Task CheckRH(1*1000, TASK_FOREVER, &readHumidity); //check relative humidity every 2 seconds
 Task CheckWaterTemp(1*1000, TASK_FOREVER, &readTemperature); //check water temperature every 2 seconds
 Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
-Task CheckPressure(1*1000, TASK_FOREVER, &readPressure);
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task AngleCalc(1*1000, TASK_FOREVER, &angleCalc);
 Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);

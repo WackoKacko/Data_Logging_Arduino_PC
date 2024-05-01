@@ -25,13 +25,11 @@
 #include "TaskScheduler.h"      //https://github.com/arkhipenko/TaskScheduler/tree/master
 #include "SHTSensor.h"      //???
 #include "SparkFun_SCD4x_Arduino_Library.h"  //https://github.com/sparkfun/SparkFun_SCD4x_Arduino_Library/tree/main
-#include "BMP280.h"             //https://github.com/mahfuz195/BMP280-arduino-library/tree/master
 #include <LibPrintf.h>            // https://github.com/embeddedartistry/arduino-printf
 #include <EEPROM.h>               // built-in (https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM)
 #include <Watchdog.h>              //installed from library manager. https://www.arduino.cc/reference/en/libraries/watchdog/
 #include <Adafruit_GFX.h> //installed from library manager, idk
 #include <Adafruit_SSD1306.h> //installed from library manager, idk
-
 
 // The following pins are used... (for the Arduino Nano Every)
 #define SOLENOID_VALVE_RELAY_PIN 3
