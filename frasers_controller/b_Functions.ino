@@ -32,7 +32,7 @@ void readTemperature() {
 
 
 void readPressure() { //returns pressure in millibar (mBar)
-  if(bmp.startMeasurement() != 0) pressure = bmp.getTemperatureAndPressure(T,P)[1];
+  pressure = bmp.readPressure();
 }
 
 

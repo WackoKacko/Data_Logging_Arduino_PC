@@ -35,9 +35,15 @@ void setup() {
 
 
   //BMP280 sensor start
-  if(!bmp.begin()){ Serial.println("BMP init failed!"); /*while(1);*/ }
-  else Serial.println("BMP init success!");
-  bmp.setOversampling(4);
+  if (!bmp.begin(0x76)) Serial.println("BMP280 Failed!");
+  else {
+    Serial.println("BMP280 OK");
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                    Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                    Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+  }
 
 
   //Pins

@@ -13,8 +13,8 @@ void loop() {
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
   if(!sht.readSample() || (box_temperature == 0 && humidity == 0) || water_temperature < -5) {
-    digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW);
-    digitalWrite(BOX_HEATER_RELAY_PIN, LOW);
+    digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
+    digitalWrite(BOX_HEATER_RELAY_PIN, HIGH);
   }
   else {
     ih_PID.Compute();

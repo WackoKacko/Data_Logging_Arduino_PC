@@ -10,7 +10,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 //Sensors
 SCD4x scd41;
 SHTSensor sht;
-BMP280 bmp;
+Adafruit_BMP280 bmp;
 
 
 //Global variables

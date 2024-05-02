@@ -25,7 +25,7 @@
 #include "TaskScheduler.h"      //https://github.com/arkhipenko/TaskScheduler/tree/master
 #include "SHTSensor.h"      //???
 #include "SparkFun_SCD4x_Arduino_Library.h"  //https://github.com/sparkfun/SparkFun_SCD4x_Arduino_Library/tree/main
-#include "BMP280.h"             //https://github.com/mahfuz195/BMP280-arduino-library/tree/master
+#include <Adafruit_BMP280.h>    // https://github.com/adafruit/Adafruit_BMP280_Library
 #include <LibPrintf.h>            // https://github.com/embeddedartistry/arduino-printf
 #include <EEPROM.h>               // built-in (https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM)
 #include <Watchdog.h>              //installed from library manager. https://www.arduino.cc/reference/en/libraries/watchdog/
