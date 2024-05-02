@@ -18,7 +18,7 @@ profiles:
       - Adafruit SSD1306 (2.5.9) # https://github.com/adafruit/Adafruit_SSD1306
       - Watchdog (3.0.2) # https://github.com/janelia-arduino/Watchdog
       - Adafruit BMP280 Library (2.6.8) #https://github.com/adafruit/Adafruit_BMP280_Library/tree/master
-      - Adafruit Sensor (1.1.14) #https://github.com/adafruit/Adafruit_Sensor
+      - Adafruit Unified Sensor (1.1.14) #https://github.com/adafruit/Adafruit_Sensor
       
 # might have to add these built-in libraries:
 # EEPROM: https://github.com/arduino/ArduinoCore-avr/tree/master/libraries/EEPROM
