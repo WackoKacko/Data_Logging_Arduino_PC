@@ -15,6 +15,7 @@ void sendJson() {
 
 
 void readCO2() {
+  scd41.setAmbientPressure(pressure);
   co2 = scd41.getCO2();
 }
 
