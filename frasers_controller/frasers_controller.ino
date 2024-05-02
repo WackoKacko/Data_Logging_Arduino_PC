@@ -33,6 +33,7 @@
 #include <Watchdog.h>              //installed from library manager. https://www.arduino.cc/reference/en/libraries/watchdog/
 #include <Adafruit_GFX.h> //installed from library manager, idk
 #include <Adafruit_SSD1306.h> //installed from library manager, idk
+#include <Adafruit_BMP280.h>    // https://github.com/adafruit/Adafruit_BMP280_Library
 
 // The following pins are used... (for the Arduino Nano Every)
 #define SOLENOID_VALVE_RELAY_PIN 3

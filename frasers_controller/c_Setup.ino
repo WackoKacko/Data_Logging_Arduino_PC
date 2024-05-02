@@ -23,7 +23,7 @@ void setup() {
   display.clearDisplay();
 
 
-  // //AHT2X sensor start
+  // //AHT2X sensor start //old, can probably delete
   while (aht.begin() != true) { //begin AHT2X sensor
     Serial.println("AHT2X not connected or fail to load calibration coefficient");
     delay(1000);
@@ -45,6 +45,30 @@ void setup() {
   scd41.startPeriodicMeasurement();
 
 
+  //BMP280 sensor start
+  // if(!bmp.begin()){ Serial.println("BMP init failed!"); /*while(1);*/ }
+  // else Serial.println("BMP init success!");
+    /* Default settings from datasheet. */
+      unsigned status;
+  //status = bmp.begin(BMP280_ADDRESS_ALT, BMP280_CHIPID);
+  status = bmp.begin(0x76);
+  if (!status) {
+    Serial.println(F("Could not find a valid BMP280 sensor, check wiring or "
+                      "try a different address!"));
+    Serial.print("SensorID was: 0x"); Serial.println(bmp.sensorID(),16);
+    Serial.print("        ID of 0xFF probably means a bad address, a BMP 180 or BMP 085\n");
+    Serial.print("   ID of 0x56-0x58 represents a BMP 280,\n");
+    Serial.print("        ID of 0x60 represents a BME 280.\n");
+    Serial.print("        ID of 0x61 represents a BME 680.\n");
+    while (1) delay(10);
+  }
+  bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                  Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                  Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                  Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                  Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+
+
   //Pins
   pinMode(SOLENOID_VALVE_RELAY_PIN, OUTPUT);
   pinMode(BOX_HEATER_RELAY_PIN, OUTPUT);
@@ -60,6 +84,7 @@ void setup() {
   Runner.addTask(CheckRH);
   Runner.addTask(CheckWaterTemp);
   Runner.addTask(CheckBoxTemp);
+  Runner.addTask(CheckPressure);
   Runner.addTask(SendJson);
   Runner.addTask(SetTempRH);
   Runner.addTask(DisplayValues);
@@ -67,6 +92,7 @@ void setup() {
   CheckRH.enable();
   CheckWaterTemp.enable();
   CheckBoxTemp.enable();
+  CheckPressure.enable();
   SendJson.enable();
   SetTempRH.enable();
   DisplayValues.enable();

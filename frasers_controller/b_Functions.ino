@@ -8,6 +8,7 @@ void sendJson() {
   Json_Doc["BHSP"] = bh_setpoint; //only going to one decimal place
   Json_Doc["waterTempC"] = ih_input;
   Json_Doc["IHSP"] = ih_setpoint;
+  Json_Doc["pressure"] = pressure;
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
   Serial.println();
 }
@@ -30,7 +31,12 @@ void readTemperature() {
 }
 
 
-void setTempRH() {
+void readPressure() { //returns pressure in millibar (mBar)
+  pressure = bmp.readPressure();
+}
+
+
+void setTempRH() { //old, can probably delete
   rh_setpoint = aht.readHumidity();
   bh_setpoint = aht.readTemperature();
 }

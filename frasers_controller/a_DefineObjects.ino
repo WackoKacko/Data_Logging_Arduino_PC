@@ -12,9 +12,10 @@ SCD4x scd41;
 // AHTxx aht(AHTXX_ADDRESS_X38, AHT1x_SENSOR); //sensor address, sensor type (aht10)
 AHTxx aht(AHTXX_ADDRESS_X38, AHT2x_SENSOR); //(aht21)
 SHTSensor sht;
+Adafruit_BMP280 bmp;
 
 //Global variables
-float box_temperature, humidity, water_temperature;
+float box_temperature, humidity, water_temperature, pressure;
 int co2;
 
 //Json document for sending sensor data.
@@ -29,6 +30,7 @@ void readCO2();
 void readHumidity();
 void readTemperature();
 void readThermistor();
+void readPressure();
 void handleUserInput();
 void displayValues();
 void setTempRH();
@@ -38,6 +40,7 @@ Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
 Task CheckRH(1*1000, TASK_FOREVER, &readHumidity); //check relative humidity every 2 seconds
 Task CheckWaterTemp(1*1000, TASK_FOREVER, &readTemperature); //check water temperature every 2 seconds
 Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperature every 2 seconds
+Task CheckPressure(1*1000, TASK_FOREVER, &readPressure);
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task SetTempRH(2*1000, TASK_FOREVER, &setTempRH); //copy AHT2X readings from outside to be setpoint for inside environment
 Task DisplayValues(1*1000, TASK_FOREVER, &displayValues);
