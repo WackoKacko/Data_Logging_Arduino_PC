@@ -8,7 +8,7 @@ void sendJson() {
   Json_Doc["BHSP"] = saved_parameters.bh.Setpoint; //only going to one decimal place
   Json_Doc["waterTempC"] = ih_input;
   Json_Doc["IHSP"] = saved_parameters.ih.Setpoint;
-  Json_Doc["pressure"] = pressure;
+  Json_Doc["pressure"] = pressure; //pressure is a float
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
   Serial.println();
 }
