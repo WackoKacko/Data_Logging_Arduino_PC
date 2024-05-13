@@ -64,6 +64,7 @@ void setup() {
   Runner.addTask(CheckPressure);
   Runner.addTask(SendJson);
   Runner.addTask(AngleCalc);
+  Runner.addTask(EEPromUpdate);
   Runner.addTask(IhSinusoidSetpoint);
   Runner.addTask(BhSinusoidSetpoint);
   Runner.addTask(RhSinusoidSetpoint);
@@ -75,6 +76,7 @@ void setup() {
   CheckPressure.enable();
   SendJson.enable();
   AngleCalc.enable();
+  EEPromUpdate.enable();
   IhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   RhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING

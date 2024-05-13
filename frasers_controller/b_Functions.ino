@@ -40,6 +40,9 @@ void readPressure() { //returns pressure in millibar (mBar)
 void angleCalc() {
   angle = fmod((float)millis(), T) * 2 * PI / T + phase_shift;
   saved_parameters.phase_shift = angle;
+}
+
+void eepromUpdate() {
   EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
 }
 
