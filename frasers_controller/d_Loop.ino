@@ -3,7 +3,6 @@ void loop() {
   Runner.execute(); //handles sensor readings and sending data over Serial
 
   wdt_reset(); //keeps watchdog from performing a software reset
-  if (Serial.available() > 0) handleUserInput();
 
   if ( millis() > WATCHDOG_TIMEOUT_PERIOD ) delay(5000); //software reset of Arduino using watchdog timer
 
