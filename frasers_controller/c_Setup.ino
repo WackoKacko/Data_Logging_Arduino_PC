@@ -10,7 +10,9 @@ void setup() {
   while(1) {
     if (Serial.available() > 0) {
       String iso_time = Serial.readStringUntil('\n');
+      Serial.print("String time read: "); Serial.println(iso_time);
       iso8601ToSeconds(iso_time);
+      Serial.print("start_time = "); Serial.print(start_time); Serial.println(" seconds");
       break;
     }
   }
