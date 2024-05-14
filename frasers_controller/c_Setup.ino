@@ -1,5 +1,6 @@
 
 void setup() {
+  wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 
   //Serial communication
   Serial.begin(115200);
@@ -10,13 +11,11 @@ void setup() {
   while(millis() < 500) {
     if (Serial.available() > 0) {
       String iso_time = Serial.readStringUntil('\n');
-      Serial.print("String time read: "); Serial.println(iso_time);
       iso8601ToSeconds(iso_time);
-      Serial.print("start_time = "); Serial.print(start_time); Serial.println(" seconds");
       break;
     }
   }
-
+  wdt_reset(); //keeps watchdog from performing a software reset
 
   //I2C communication
   Wire.begin(); //begin I2C communication
@@ -106,5 +105,4 @@ void setup() {
   rh_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
 
-  wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 }
