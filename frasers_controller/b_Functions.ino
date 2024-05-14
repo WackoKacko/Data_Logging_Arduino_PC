@@ -38,14 +38,14 @@ void readPressure() { //returns pressure in millibar (mBar)
 
 
 void iso8601ToSeconds(String isoTime) {  // Calculate seconds since midnight
-  int hour = isoTime.substring(11, 13).toInt();
+  long hour = isoTime.substring(11, 13).toInt();
   Serial.print("hour = "); Serial.println(hour);
   int minute = isoTime.substring(14, 16).toInt();
   Serial.print("minute = "); Serial.println(minute);
   int second = isoTime.substring(17, 19).toInt();
   Serial.print("second = "); Serial.println(second);
 
-  start_time = (hour * 3600) + (minute * 60) + second;
+  start_time = (float)((hour * 3600) + (minute * 60) + second);
 }
 
 
