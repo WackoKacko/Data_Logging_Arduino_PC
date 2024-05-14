@@ -31,7 +31,7 @@ void readTemperature();
 void readThermistor();
 void readPressure();
 void angleCalc();
-void eepromUpdate();
+// void eepromUpdate();
 void ihSinusoidSetpoint();
 void bhSinusoidSetpoint();
 void rhSinusoidSetpoint();
@@ -45,7 +45,7 @@ Task CheckBoxTemp(1*1000, TASK_FOREVER, &readThermistor); //check box temperatur
 Task CheckPressure(1*1000, TASK_FOREVER, &readPressure);
 Task SendJson(10*1000, TASK_FOREVER, &sendJson); //send box temp, co2, and relative humidity every 5 seconds
 Task AngleCalc(1*1000, TASK_FOREVER, &angleCalc);
-Task EEPromUpdate(120*1000, TASK_FOREVER, &eepromUpdate);
+// Task EEPromUpdate(120*1000, TASK_FOREVER, &eepromUpdate);
 Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);
 Task BhSinusoidSetpoint(1*1000, TASK_FOREVER, &bhSinusoidSetpoint);
 Task RhSinusoidSetpoint(1*1000, TASK_FOREVER, &rhSinusoidSetpoint);

@@ -3,11 +3,11 @@ void sendJson() {
   Json_Doc["ID"] = DEVICE_ID;
   Json_Doc["co2"] = co2;
   Json_Doc["%RH"] = humidity;
-  Json_Doc["RHSP"] = saved_parameters.rh.Setpoint; //only going to one decimal place
+  Json_Doc["RHSP"] = rh_setpoint; //only going to one decimal place
   Json_Doc["boxTempC"] = box_temperature;
-  Json_Doc["BHSP"] = saved_parameters.bh.Setpoint; //only going to one decimal place
+  Json_Doc["BHSP"] = bh_setpoint; //only going to one decimal place
   Json_Doc["waterTempC"] = ih_input;
-  Json_Doc["IHSP"] = saved_parameters.ih.Setpoint;
+  Json_Doc["IHSP"] = ih_setpoint;
   Json_Doc["pressure"] = pressure; //pressure is a float
   serializeJson(Json_Doc, Serial);  // Generate the minified JSON and send it to the Serial port.
   Serial.println();
@@ -52,15 +52,15 @@ void angleCalc() {
 
 
 void ihSinusoidSetpoint() { 
-  saved_parameters.ih.Setpoint = ih_a * sin(angle+1.5708) + ih_b;
+  ih_setpoint = ih_a * sin(angle+1.5708) + ih_b;
 }
 
 void bhSinusoidSetpoint() {
-  saved_parameters.bh.Setpoint = bh_a * sin(angle+1.5708) + bh_b;
+  bh_setpoint = bh_a * sin(angle+1.5708) + bh_b;
 }
 
 void rhSinusoidSetpoint() {
-  saved_parameters.rh.Setpoint = rh_a * sin(angle+4.7124) + rh_b; 
+  rh_setpoint = rh_a * sin(angle+4.7124) + rh_b; 
 }
 
 
@@ -109,12 +109,12 @@ void displayValues() {
 
   display.setCursor(65, 10);
   display.print("SetBox=");
-  display.print((int)saved_parameters.bh.Setpoint);
+  display.print((int)bh_setpoint);
   display.println("C");
 
   display.setCursor(71, 20);
   display.print("SetRH=");
-  display.print((int)saved_parameters.rh.Setpoint);
+  display.print((int)rh_setpoint);
   display.println("%");
 
   display.setCursor(40, 25);
