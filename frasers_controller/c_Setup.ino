@@ -8,12 +8,13 @@ void setup() {
 
   Serial.println("Serial up. Initializing.");
 
-  while(millis() < 1500) {
+  while(1) {
     if (Serial.available() > 0) {
       String iso_time = Serial.readStringUntil('\n');
       iso8601ToSeconds(iso_time);
       break;
     }
+    else delay(500);
   }
   wdt_reset(); //keeps watchdog from performing a software reset
 
