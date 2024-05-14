@@ -7,7 +7,7 @@ void setup() {
 
   Serial.println("Serial up. Initializing.");
 
-  while(1) {
+  while(millis() < 500) {
     if (Serial.available() > 0) {
       String iso_time = Serial.readStringUntil('\n');
       Serial.print("String time read: "); Serial.println(iso_time);
