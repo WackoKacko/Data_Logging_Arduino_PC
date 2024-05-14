@@ -37,13 +37,17 @@ void readPressure() { //returns pressure in millibar (mBar)
 }
 
 
-void angleCalc() {
-  angle = fmod((float)millis(), T) * 2 * PI / T + phase_shift;
-  saved_parameters.phase_shift = angle;
+void iso8601ToSeconds(String isoTime) {  // Calculate seconds since midnight
+  int hour = isoTime.substring(11, 13).toInt();
+  int minute = isoTime.substring(14, 16).toInt();
+  int second = isoTime.substring(17, 19).toInt();
+
+  start_time = (hour * 3600) + (minute * 60) + second;
 }
 
-void eepromUpdate() {
-  EEPROM.put(flash_address, saved_parameters); // Save the parameters to EEPROM
+
+void angleCalc() {
+  angle = 2*PI/86400*(millis()/1000 + start_time - 28800);
 }
 
 

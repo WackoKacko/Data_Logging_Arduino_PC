@@ -7,6 +7,14 @@ void setup() {
 
   Serial.println("Serial up. Initializing.");
 
+  while(1) {
+    if (Serial.available() > 0) {
+      String iso_time = Serial.readStringUntil('\n');
+      iso8601ToSeconds(iso_time);
+      break;
+    }
+  }
+
 
   //I2C communication
   Wire.begin(); //begin I2C communication
