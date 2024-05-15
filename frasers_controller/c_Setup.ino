@@ -22,18 +22,6 @@ void setup() {
   Wire.begin(); //begin I2C communication
   Serial.println(F("I2C up."));
 
-  //Little I2C Screen
-  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
-    Serial.println(F("SSD1306 allocation failed"));
-  }
-  else Serial.println(F("Screen ok!"));
-  display.display(); // Display splash screen
-  delay(500);
-  display.clearDisplay();
-
-  wdt_reset(); //keeps watchdog from performing a software reset
-
-
   // SHT30 sensor start
   if (sht.init()) Serial.println(F("SHT30 OK"));
   else Serial.println(F("SHT30 FAILED"));
@@ -58,6 +46,17 @@ void setup() {
                     Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                     Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
   }
+
+  wdt_reset(); //keeps watchdog from performing a software reset
+
+  //Little I2C Screen
+  if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+    Serial.println(F("SSD1306 allocation failed"));
+  }
+  else Serial.println(F("Screen ok!"));
+  display.display(); // Display splash screen
+  delay(500);
+  display.clearDisplay();
 
   wdt_reset(); //keeps watchdog from performing a software reset
 
