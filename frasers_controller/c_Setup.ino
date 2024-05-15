@@ -10,7 +10,7 @@ void setup() {
 
   digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //MIGHT NEED TO CHANGE TO HIGH!
 
-  wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
+  // wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 
   //Serial communication
   Serial.begin(115200);
