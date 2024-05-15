@@ -35,6 +35,7 @@ void ihSinusoidSetpoint();
 void bhSinusoidSetpoint();
 void rhSinusoidSetpoint();
 void displayValues();
+void requestTime();
 
 //Tasks
 Task CheckCO2(10*1000, TASK_FOREVER, &readCO2); //check CO2 every 10 seconds
@@ -48,17 +49,22 @@ Task IhSinusoidSetpoint(1*1000, TASK_FOREVER, &ihSinusoidSetpoint);
 Task BhSinusoidSetpoint(1*1000, TASK_FOREVER, &bhSinusoidSetpoint);
 Task RhSinusoidSetpoint(1*1000, TASK_FOREVER, &rhSinusoidSetpoint);
 Task DisplayValues(1*1000, TASK_FOREVER, &displayValues);
+Task RequestTime(500, TASK_FOREVER, &requestTime);
 
+double ih_setpoint, bh_setpoint, rh_setpoint;
 
-double ih_input, ih_output, ih_setpoint, bh_setpoint, rh_setpoint; // ("ih" stands for "immersion heater")
+double ih_input = NAN;
+double ih_output;  // ("ih" stands for "immersion heater")
 PID ih_PID(&ih_input, &ih_output, &ih_setpoint, 1000, 500, 100, DIRECT);
 unsigned long ih_start;
 
-double bh_input, bh_output; // ("bh" stands for "box heater")
+double bh_input = NAN;
+double bh_output; // ("bh" stands for "box heater")
 PID bh_PID(&bh_input, &bh_output, &bh_setpoint, 600, 500, 100, DIRECT);
 unsigned long bh_start;
 
-double rh_input, rh_output; // ("rh" stands for "relative humidity")
+double rh_input = NAN;
+double rh_output; // ("rh" stands for "relative humidity")
 PID rh_PID(&rh_input, &rh_output, &rh_setpoint, 1000, 500, 100, DIRECT);
 unsigned long rh_start;
 
@@ -66,7 +72,8 @@ const unsigned int MIN_CHANGE_TIME = 500;
 const unsigned int WINDOW_SIZE = 3000; //for PID
 
 const unsigned long T = 8.64e7; //Period in milliseconds. 1 day = 8.64e7 ms. ***WARNING!!! DO NOT PERFORM A CALCULATION HERE LIKE "T = 1000*60*60*24, THAT BREAKS THE CODE FOR ARCANE REASONS. INPUT THE EXACT NUMBER YOU WANT, PERHAPS IN SCIENTIFIC NOTATION.
-float angle, start_time;
+float angle;
+float start_time = NAN;
 
 float ih_a = (IH_MAX - IH_MIN) / 2; float ih_b = (IH_MAX + IH_MIN) / 2;
 float bh_a = (BH_MAX - BH_MIN) / 2; float bh_b = (BH_MAX + BH_MIN) / 2;

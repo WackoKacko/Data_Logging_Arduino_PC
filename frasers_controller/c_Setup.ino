@@ -8,7 +8,7 @@ void setup() {
   pinMode(WATER_LEVEL_PIN, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //MIGHT NEED TO CHANGE TO HIGH!
+  // digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //MIGHT NEED TO CHANGE TO HIGH!
 
   wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 
@@ -16,16 +16,16 @@ void setup() {
   Serial.begin(115200);
   while(!Serial) {}
 
-  Serial.println("Serial up. Initializing.");
+  // Serial.println("Serial up. Initializing.");
 
-  while(1) {
-    if (Serial.available() > 0) {
-      String iso_time = Serial.readStringUntil('\n');
-      iso8601ToSeconds(iso_time);
-      break;
-    }
-    else delay(500);
-  }
+  // while(1) {
+  //   if (Serial.available() > 0) {
+  //     String iso_time = Serial.readStringUntil('\n');
+  //     iso8601ToSeconds(iso_time);
+  //     break;
+  //   }
+  //   else delay(500);
+  // }
   wdt_reset(); //keeps watchdog from performing a software reset
 
   //I2C communication
@@ -84,6 +84,7 @@ void setup() {
   Runner.addTask(BhSinusoidSetpoint);
   Runner.addTask(RhSinusoidSetpoint);
   Runner.addTask(DisplayValues);
+  Runner.addTask(RequestTime);
   CheckCO2.enable();
   CheckRH.enable();
   CheckWaterTemp.enable();
@@ -95,6 +96,7 @@ void setup() {
   BhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   RhSinusoidSetpoint.enable(); //ENABLE THESE IF YOU WISH TO TURN ON THE DAY/NIGHT SETPOINT SCHEDULING
   DisplayValues.enable();
+  RequestTime.enable();
   Serial.println("Initialized scheduler");
 
   ih_start = millis();
@@ -112,4 +114,10 @@ void setup() {
   rh_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
 
+  while(isnan(ih_input)) { readThermistor(); }
+  ih_setpoint = ih_input;
+  while(isnan(rh_input)) { readHumidity(); }
+  rh_setpoint = rh_input;
+  while(isnan(bh_input)) { readTemperature(); }
+  bh_setpoint = bh_input;
 }

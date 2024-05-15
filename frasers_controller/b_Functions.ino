@@ -47,20 +47,28 @@ void iso8601ToSeconds(String isoTime) {  // Calculate seconds since midnight
 
 
 void angleCalc() {
-  angle = 2*PI/86400*(millis()/1000 + start_time - 28800);
+  if(!isnan(start_time)) {
+    angle = 2*PI/86400*(millis()/1000 + start_time - 28800);
+  }
 }
 
 
 void ihSinusoidSetpoint() { 
-  ih_setpoint = ih_a * sin(angle+1.5708) + ih_b;
+  if(!isnan(start_time)) {
+    ih_setpoint = ih_a * sin(angle+1.5708) + ih_b;
+  }
 }
 
 void bhSinusoidSetpoint() {
-  bh_setpoint = bh_a * sin(angle+1.5708) + bh_b;
+  if(!isnan(start_time)) {
+    bh_setpoint = bh_a * sin(angle+1.5708) + bh_b;
+  }
 }
 
 void rhSinusoidSetpoint() {
-  rh_setpoint = rh_a * sin(angle+4.7124) + rh_b; 
+  if(!isnan(start_time)) {
+    rh_setpoint = rh_a * sin(angle+4.7124) + rh_b; 
+  }
 }
 
 
@@ -122,4 +130,14 @@ void displayValues() {
   display.println(DEVICE_ID);
   
   display.display();
+}
+
+
+void requestTime() {
+  Serial.println("Serial up. Initializing.");
+  delay(10);
+  if (Serial.available() > 0) {
+      String iso_time = Serial.readStringUntil('\n');
+      iso8601ToSeconds(iso_time);
+      if(!isnan(start_time)) RequestTime.disable();
 }
