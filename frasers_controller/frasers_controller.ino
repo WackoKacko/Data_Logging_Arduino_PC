@@ -39,10 +39,10 @@
 #define THERMISTOR_PIN 14 //(A0)
 #define WATER_LEVEL_PIN 21 //(A7)
 
-const unsigned int DEVICE_ID = 10;//$$DEVICE_ID$$;
-const int IH_MAX = 10;//$$TEMP_MAX$$; //max water temperature
-const int IH_MIN = 10;//$$TEMP_MIN$$; //min water temperature
-const int BH_MAX = 10;//$$TEMP_MAX$$; //max water temperature
-const int BH_MIN = 10;//$$TEMP_MIN$$; //min water temperature
-const int RH_MAX = 10;//$$RH_MAX$$; //max relative humidity
-const int RH_MIN = 10;//$$RH_MIN$$; //min relative humidity
+const unsigned int DEVICE_ID = $$DEVICE_ID$$;
+const int IH_MAX = $$TEMP_MAX$$; //max water temperature
+const int IH_MIN = $$TEMP_MIN$$; //min water temperature
+const int BH_MAX = $$TEMP_MAX$$; //max water temperature
+const int BH_MIN = $$TEMP_MIN$$; //min water temperature
+const int RH_MAX = $$RH_MAX$$; //max relative humidity
+const int RH_MIN = $$RH_MIN$$; //min relative humidity

@@ -140,4 +140,5 @@ void requestTime() {
       String iso_time = Serial.readStringUntil('\n');
       iso8601ToSeconds(iso_time);
       if(!isnan(start_time)) RequestTime.disable();
+  }
 }
