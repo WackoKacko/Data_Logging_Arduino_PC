@@ -35,9 +35,12 @@ void setup() {
   Serial.println(F("I2C up."));
 
   // SHT30 sensor start
-  if (sht.init()) Serial.println(F("SHT30 OK"));
+  if (sht.init()) {
+    Serial.println(F("SHT30 OK"));
+    sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM); // only supported by SHT3x
+  }
   else Serial.println(F("SHT30 FAILED"));
-  sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM); // only supported by SHT3x
+  
 
   wdt_reset(); //keeps watchdog from performing a software reset
 
