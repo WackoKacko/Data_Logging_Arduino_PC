@@ -13,10 +13,10 @@ void loop() {
 
   if(!sht.readSample() || (box_temperature == 0 && humidity == 0)) {
     Serial.println("SHT sensor failure!");
-    digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
+    digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); 
   } else if(water_temperature < -5) {
     Serial.println("Water temperature suspiciously low!");
-    digitalWrite(BOX_HEATER_RELAY_PIN, HIGH);
+    digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
   } else {
     ih_PID.Compute();
     if (millis() - ih_start > WINDOW_SIZE) ih_start = millis(); //time to shift the Relay Window (ih_start = millis() also works)
