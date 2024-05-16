@@ -45,9 +45,12 @@ void setup() {
   wdt_reset(); //keeps watchdog from performing a software reset
 
   //SCD41 sensor start
-  if (scd41.begin(Wire) == true) Serial.println("SCD41 OK"); //begin SCD41 sensor
-  scd41.stopPeriodicMeasurement(); delay(200);
-  scd41.startPeriodicMeasurement();
+  if (scd41.begin(Wire) == true) {
+    Serial.println("SCD41 OK"); //begin SCD41 sensor
+    scd41.stopPeriodicMeasurement(); 
+    delay(200);
+    scd41.startPeriodicMeasurement();
+  }
 
   wdt_reset(); //keeps watchdog from performing a software reset
 
