@@ -55,7 +55,7 @@ void setup() {
                     Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                     Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
   } else {
-    delay(100);
+    delay(200);
     if (bmp.begin(0x76)) {
       Serial.println("BMP280 OK");
       bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
