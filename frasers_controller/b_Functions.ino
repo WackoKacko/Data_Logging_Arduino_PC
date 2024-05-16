@@ -137,14 +137,16 @@ void requestTime() {
   Serial.println("Serial up. Initializing.");
   // delay(10);
   if (Serial.available() > 0) {
-      String iso_time = Serial.readStringUntil('\n');
-      iso8601ToSeconds(iso_time);
-      if(!isnan(start_time)) {
-          RequestTime.disable();
-          Serial.print("Received time: ");
-          Serial.println(iso_time);
-      } else {
-          Serial.println("Still waiting for time sync.");
-      }
+    String iso_time = Serial.readStringUntil('\n');
+    iso8601ToSeconds(iso_time);
+    if(!isnan(start_time)) {
+      RequestTime.disable();
+      Serial.print("Received time: ");
+      Serial.println(iso_time);
+    } else {
+        Serial.println("Still waiting for time sync.");
+    }
+  } else {
+      Serial.println("Still waiting for time sync.");
   }
 }
