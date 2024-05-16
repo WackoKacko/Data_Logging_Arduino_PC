@@ -14,7 +14,14 @@ void loop() {
   if(!sht.readSample() || (box_temperature == 0 && humidity == 0)) {
     Serial.println("SHT sensor failure!");
     digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); 
-  } else if(water_temperature < -5) {
+  } else {
+    bh_PID.Compute();
+    if (millis() - bh_start > WINDOW_SIZE) bh_start = millis(); //time to shift the Relay Window
+    if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
+    else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
+  }
+  
+  if(water_temperature < -5) {
     Serial.println("Water temperature suspiciously low!");
     digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
   } else {
@@ -22,10 +29,5 @@ void loop() {
     if (millis() - ih_start > WINDOW_SIZE) ih_start = millis(); //time to shift the Relay Window (ih_start = millis() also works)
     if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR). 
     else digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
-
-    bh_PID.Compute();
-    if (millis() - bh_start > WINDOW_SIZE) bh_start = millis(); //time to shift the Relay Window
-    if (bh_output < millis() - bh_start) digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR)
-    else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
   }
 }
