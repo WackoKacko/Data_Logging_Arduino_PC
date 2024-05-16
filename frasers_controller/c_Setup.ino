@@ -8,7 +8,9 @@ void setup() {
   pinMode(WATER_LEVEL_PIN, INPUT);
   pinMode(LED_BUILTIN, OUTPUT);
 
-  // digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //MIGHT NEED TO CHANGE TO HIGH!
+  digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //MIGHT NEED TO CHANGE TO HIGH!
+  digitalWrite(BOX_HEATER_RELAY_PIN, LOW);
+  digitalWrite(IMMERSION_HEATER_RELAY_PIN, LOW);
 
   wdt_enable(WDT_PERIOD_2KCLK_gc); //this is to enable watchdog so we can do a software reset every once in a while
 
