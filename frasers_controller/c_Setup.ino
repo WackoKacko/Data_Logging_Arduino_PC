@@ -47,14 +47,23 @@ void setup() {
   wdt_reset(); //keeps watchdog from performing a software reset
 
   //BMP280 sensor start
-  if (!bmp.begin(0x76)) Serial.println("BMP280 Failed!");
-  else {
+  if (bmp.begin(0x76)) {
     Serial.println("BMP280 OK");
     bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
                     Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
                     Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
                     Adafruit_BMP280::FILTER_X16,      /* Filtering. */
                     Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+  } else {
+    delay(100);
+    if (bmp.begin(0x76)) {
+      Serial.println("BMP280 OK");
+      bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                      Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                      Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                      Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                      Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+    } else Serial.println("BMP280 Failed!");
   }
 
   wdt_reset(); //keeps watchdog from performing a software reset

@@ -48,7 +48,7 @@ void iso8601ToSeconds(String isoTime) {  // Calculate seconds since midnight
 
 void angleCalc() {
   if(!isnan(start_time)) {
-    angle = 2*PI/86400*(millis()/1000 + start_time - 28800);
+    angle = 2*PI/86400*(millis()/1000 + start_time - 50400);
   }
 }
 
@@ -135,7 +135,7 @@ void displayValues() {
 
 void requestTime() {
   Serial.println("Serial up. Initializing.");
-  delay(10);
+  // delay(10);
   if (Serial.available() > 0) {
       String iso_time = Serial.readStringUntil('\n');
       iso8601ToSeconds(iso_time);
