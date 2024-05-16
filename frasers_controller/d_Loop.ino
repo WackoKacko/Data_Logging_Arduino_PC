@@ -11,11 +11,13 @@ void loop() {
   if (rh_output > millis() - rh_start && rh_output > MIN_CHANGE_TIME) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
-  if(!sht.readSample() || (box_temperature == 0 && humidity == 0) || water_temperature < -5) {
+  if(!sht.readSample() || (box_temperature == 0 && humidity == 0)) {
+    Serial.println("SHT sensor failure!");
     digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
+  } else if(water_temperature < -5) {
+    Serial.println("Water temperature suspiciously low!");
     digitalWrite(BOX_HEATER_RELAY_PIN, HIGH);
-  }
-  else {
+  } else {
     ih_PID.Compute();
     if (millis() - ih_start > WINDOW_SIZE) ih_start = millis(); //time to shift the Relay Window (ih_start = millis() also works)
     if (ih_output < millis() - ih_start) digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH); //window on time (INVERTED LOGIC SOLENOID VS SSR). 
