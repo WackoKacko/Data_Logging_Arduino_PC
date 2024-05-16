@@ -120,9 +120,12 @@ void setup() {
   bh_start = millis();
   rh_start = millis();
  
-  // ih_input = 100; //higher than anything we'd expect so that nothing happens until first sensor readings
-  // bh_input = 100;
-  // rh_input = 100;
+  while(isnan(ih_input)) { readThermistor(); }
+  ih_setpoint = ih_input;
+  while(isnan(rh_input)) { readHumidity(); }
+  rh_setpoint = rh_input;
+  while(isnan(bh_input)) { readTemperature(); }
+  bh_setpoint = bh_input;
   
   ih_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   ih_PID.SetMode(AUTOMATIC); //turn the PID on
@@ -130,11 +133,4 @@ void setup() {
   bh_PID.SetMode(AUTOMATIC); //turn the PID on
   rh_PID.SetOutputLimits(0, WINDOW_SIZE); //tell the PID to range between 0 and the full window size
   rh_PID.SetMode(AUTOMATIC); //turn the PID on
-
-  while(isnan(ih_input)) { readThermistor(); }
-  ih_setpoint = ih_input;
-  while(isnan(rh_input)) { readHumidity(); }
-  rh_setpoint = rh_input;
-  while(isnan(bh_input)) { readTemperature(); }
-  bh_setpoint = bh_input;
 }
