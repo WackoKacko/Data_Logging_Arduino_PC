@@ -18,16 +18,6 @@ void setup() {
   Serial.begin(115200);
   while(!Serial) {}
 
-  // Serial.println("Serial up. Initializing.");
-
-  // while(1) {
-  //   if (Serial.available() > 0) {
-  //     String iso_time = Serial.readStringUntil('\n');
-  //     iso8601ToSeconds(iso_time);
-  //     break;
-  //   }
-  //   else delay(500);
-  // }
   wdt_reset(); //keeps watchdog from performing a software reset
 
   //I2C communication
@@ -40,7 +30,6 @@ void setup() {
     sht.setAccuracy(SHTSensor::SHT_ACCURACY_MEDIUM); // only supported by SHT3x
   }
   else Serial.println(F("SHT30 FAILED"));
-  
 
   wdt_reset(); //keeps watchdog from performing a software reset
 
@@ -86,7 +75,6 @@ void setup() {
   display.clearDisplay();
 
   wdt_reset(); //keeps watchdog from performing a software reset
-
 
   //Task scheduler
   Runner.init();
