@@ -12,7 +12,7 @@ void loop() {
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
   if(!sht.readSample() || (box_temperature == 0 && humidity == 0)) {
-    Serial.println("SHT sensor failure!");
+    // Serial.println("SHT sensor failure!"); //DO NOT UNCOMMENT THIS!!!
     digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); 
   } else {
     bh_PID.Compute();
@@ -22,7 +22,7 @@ void loop() {
   }
   
   if(water_temperature < -5) {
-    Serial.println("Water temperature suspiciously low!");
+    // Serial.println("Water temperature suspiciously low!"); //DO NOT UNCOMMENT THIS!!!
     digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
   } else {
     ih_PID.Compute();
