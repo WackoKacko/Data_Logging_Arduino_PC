@@ -11,7 +11,7 @@ void loop() {
   if (rh_output > millis() - rh_start && rh_output > MIN_CHANGE_TIME) digitalWrite(SOLENOID_VALVE_RELAY_PIN, HIGH); //NOTE THE >/<
   else digitalWrite(SOLENOID_VALVE_RELAY_PIN, LOW);
 
-  if(!sht.readSample() || (box_temperature == 0 && humidity == 0)) {
+  if(!sht.readSample() || (box_temperature == 0 && humidity == 0) || box_temperature > 40) {
     // Serial.println("SHT sensor failure!"); //DO NOT UNCOMMENT THIS!!!
     digitalWrite(BOX_HEATER_RELAY_PIN, HIGH); 
   } else {
@@ -21,7 +21,7 @@ void loop() {
     else digitalWrite(BOX_HEATER_RELAY_PIN, LOW); //window off time (INVERTED LOGIC SOLENOID VS SSR)
   }
   
-  if(water_temperature < -5) {
+  if(water_temperature < -5 || water_temperature > 40) {
     // Serial.println("Water temperature suspiciously low!"); //DO NOT UNCOMMENT THIS!!!
     digitalWrite(IMMERSION_HEATER_RELAY_PIN, HIGH);
   } else {
