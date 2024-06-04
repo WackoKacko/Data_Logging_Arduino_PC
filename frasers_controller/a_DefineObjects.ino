@@ -16,6 +16,7 @@ Adafruit_BMP280 bmp;
 //Global variables
 float box_temperature, humidity, water_temperature, pressure;
 int co2;
+unsigned long last_PID;
 
 //Json document for sending sensor data.
 StaticJsonDocument<200> Json_Doc;
